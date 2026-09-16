@@ -1,0 +1,320 @@
+/* =========================================================
+   TOKENS — change these to re-theme the whole site
+   ========================================================= */
+:root {
+  --black: #15120f;
+  --orange: #d9711f;
+  --orange-dark: #b85c15;
+  --gold: #f0a400;
+  --blue: #3e6fb0;
+  --grey: #a7a29b;
+  --grey-dark: #6f6a63;
+  --paper: #faf6ef;
+  --ink: #15120f;
+  --ink-soft: #4a453f;
+  --white: #ffffff;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Work Sans", -apple-system, Segoe UI, sans-serif;
+
+  --max-width: 1100px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Empty-state placeholder styling: shows while real photos/covers
+   are not yet in the /images folder. Once you add a real image,
+   this label disappears automatically because the <img> loads. */
+.placeholder-label {
+  display: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--white);
+  text-align: center;
+  padding: 0 0.5rem;
+}
+[class*="cell-"].empty,
+.photo-box.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[class*="cell-"].empty .placeholder-label,
+.photo-box.empty .placeholder-label {
+  display: block;
+}
+
+/* =========================================================
+   TOP STRIP — author photo + bookstore banner
+   ========================================================= */
+.top-strip {
+  display: flex;
+  gap: 3px;
+  max-width: var(--max-width);
+  margin: 3px auto 0;
+  padding: 0 3px;
+}
+
+.photo-box {
+  flex: 0 0 96px;
+  height: 96px;
+  background: var(--gold);
+  overflow: hidden;
+}
+.photo-box img { width: 100%; height: 100%; object-fit: cover; }
+
+.bookstore-banner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  transition: background 0.15s ease;
+}
+.bookstore-banner:hover { background: var(--paper); }
+
+/* =========================================================
+   HERO — name / title + contact & social
+   ========================================================= */
+.hero-strip {
+  display: flex;
+  gap: 3px;
+  max-width: var(--max-width);
+  margin: 3px auto 0;
+  padding: 0 3px;
+}
+
+.hero-name {
+  flex: 2.5;
+  background: var(--black);
+  color: var(--white);
+  padding: 2.75rem 2.5rem;
+  text-align: center;
+}
+.hero-name h1 {
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  font-weight: 500;
+}
+.hero-subtitle {
+  margin-top: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+}
+
+.hero-contact {
+  flex: 1;
+  background: var(--black);
+  color: var(--white);
+  border-left: 1px solid #2c2822;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.65rem;
+  text-align: center;
+}
+.contact-label {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--grey);
+}
+.hero-contact a { font-size: 0.9rem; }
+.hero-contact a:hover { color: var(--gold); }
+.social-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
+
+/* =========================================================
+   NAV — black bar with dropdowns
+   ========================================================= */
+.main-nav {
+  max-width: var(--max-width);
+  margin: 3px auto 0;
+  padding: 0 3px;
+  background: var(--black);
+  position: relative;
+  z-index: 20;
+}
+.main-nav > ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.main-nav > ul > li {
+  flex: 1;
+  text-align: center;
+  border-right: 1px solid #2c2822;
+}
+.main-nav > ul > li:last-child { border-right: none; }
+
+.main-nav > ul > li > a {
+  display: block;
+  padding: 0.9rem 0.75rem;
+  color: var(--white);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.15s ease;
+}
+.main-nav > ul > li > a:hover { background: #262019; }
+
+/* dropdown panel */
+.dropdown {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  display: none;
+  gap: 6px;
+  background: transparent;
+}
+.has-dropdown { position: relative; }
+.has-dropdown:hover .dropdown,
+.has-dropdown:focus-within .dropdown,
+.has-dropdown.open .dropdown {
+  display: flex;
+  flex-direction: column;
+}
+.dropdown li a {
+  display: block;
+  background: var(--grey);
+  color: var(--ink);
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  transition: background 0.15s ease;
+}
+.dropdown li a:hover { background: var(--grey-dark); color: var(--white); }
+
+/* =========================================================
+   SHOWCASE — featured book, 2x2 grid on orange field
+   ========================================================= */
+.showcase {
+  max-width: var(--max-width);
+  margin: 3px auto 0;
+  padding: 2.5rem 3px 3px;
+  background: var(--orange);
+}
+.showcase-title {
+  color: var(--white);
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  margin-bottom: 1.5rem;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cell {
+  min-height: 260px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cell-cover, .cell-back {
+  background: var(--gold);
+  align-items: center;
+  text-align: center;
+  min-height: 340px;
+  padding: 0;
+  overflow: hidden;
+}
+.cell-cover img, .cell-back img { width: 100%; height: 100%; object-fit: cover; }
+
+.cell-about, .cell-notes {
+  background: var(--blue);
+  color: var(--white);
+}
+.cell-about h3, .cell-notes h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+.cell-about p, .cell-notes p {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  max-width: 46ch;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.site-footer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1.5rem 0.75rem 3rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 760px) {
+  .top-strip, .hero-strip { flex-direction: column; }
+  .photo-box { width: 96px; }
+  .hero-contact { border-left: none; border-top: 1px solid #2c2822; }
+
+  .main-nav > ul { flex-direction: column; }
+  .main-nav > ul > li { border-right: none; border-bottom: 1px solid #2c2822; }
+  .dropdown { position: static; }
+  .has-dropdown:hover .dropdown,
+  .has-dropdown:focus-within .dropdown { display: flex; }
+
+  .showcase-grid { grid-template-columns: 1fr; }
+  .cell-cover, .cell-back { min-height: 260px; }
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
+
+/* Visible keyboard focus */
+a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}

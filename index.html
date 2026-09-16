@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Παναγιώτης Μιντόπουλος | Συγγραφέας</title>
+<meta name="description" content="Επίσημη ιστοσελίδα του συγγραφέα Παναγιώτη Μιντόπουλου.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ TOP STRIP: photo + bookstore banner ============ -->
+<div class="top-strip">
+  <div class="photo-box">
+    <img src="images/author-photo.jpg" alt="Φωτογραφία συγγραφέα" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
+    <span class="placeholder-label">φωτό</span>
+  </div>
+  <a href="#" class="bookstore-banner">
+    Βρείτε τα βιβλία μου στο βιβλιοπωλείο &nbsp;→
+  </a>
+</div>
+
+<!-- ============ HERO: name/title + contact & social ============ -->
+<div class="hero-strip">
+  <div class="hero-name">
+    <h1>Παναγιώτης Μιντόπουλος</h1>
+    <p class="hero-subtitle">Συγγραφέας</p>
+  </div>
+  <div class="hero-contact">
+    <p class="contact-label">Επικοινωνία</p>
+    <a href="mailto:info@example.com">info@example.com</a>
+    <div class="social-row">
+      <a href="#" aria-label="Instagram">Instagram</a>
+      <a href="#" aria-label="Facebook">Facebook</a>
+      <a href="#" aria-label="Goodreads">Goodreads</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<nav class="main-nav">
+  <ul>
+    <li class="has-dropdown">
+      <a href="#">Εκδόσεις</a>
+      <ul class="dropdown">
+        <li><a href="#">Μυθιστορήματα</a></li>
+        <li><a href="#">Διηγήματα</a></li>
+      </ul>
+    </li>
+    <li class="has-dropdown">
+      <a href="#">Εργαστήριο</a>
+      <ul class="dropdown">
+        <li><a href="#">Ημιτελή</a></li>
+        <li><a href="#">Αρχειοθετημένα</a></li>
+      </ul>
+    </li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#">Βιογραφικό</a></li>
+    <li class="has-dropdown">
+      <a href="#">Extras</a>
+      <ul class="dropdown">
+        <li><a href="#">Ζωγραφιές</a></li>
+        <li><a href="#">Μοντελισμός</a></li>
+        <li><a href="#">Προτάσεις</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<!-- ============ FEATURED BOOK SHOWCASE ============ -->
+<main class="showcase">
+  <h2 class="showcase-title">Τελευταία κυκλοφορία</h2>
+
+  <div class="showcase-grid">
+    <div class="cell cell-cover">
+      <img src="images/latest-book-cover.jpg" alt="Εξώφυλλο τελευταίου βιβλίου" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
+      <span class="placeholder-label">εικόνα τελευταίας κυκλοφορίας</span>
+    </div>
+
+    <div class="cell cell-about">
+      <h3>Λίγα λόγια για το βιβλίο</h3>
+      <p>Εδώ θα μπει το κείμενο σχετικά με την υπόθεση, το είδος και το ύφος του βιβλίου — μια σύντομη, περιεκτική παρουσίαση που θα κάνει τον αναγνώστη να θέλει να μάθει περισσότερα.</p>
+    </div>
+
+    <div class="cell cell-notes">
+      <h3>Σχόλια του συγγραφέα</h3>
+      <p>Εδώ θα μπουν προσωπικά σχόλια του συγγραφέα για το βιβλίο — η αφορμή που το γέννησε, δυσκολίες στη γραφή, ή οτιδήποτε θέλει να μοιραστεί με τους αναγνώστες.</p>
+    </div>
+
+    <div class="cell cell-back">
+      <img src="images/back-cover.jpg" alt="Οπισθόφυλλο" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
+      <span class="placeholder-label">οπισθόφυλλο</span>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; <span id="year"></span> Παναγιώτης Μιντόπουλος</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
