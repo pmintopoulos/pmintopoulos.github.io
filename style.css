@@ -151,10 +151,20 @@ h1, h2, h3 {
 .social-row {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 0.9rem;
   flex-wrap: wrap;
-  margin-top: 0.25rem;
-  font-size: 0.85rem;
+  margin-top: 0.4rem;
+}
+.social-icon {
+  display: inline-flex;
+  color: var(--white);
+  opacity: 0.85;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.social-icon:hover {
+  opacity: 1;
+  color: var(--gold);
 }
 
 /* =========================================================
