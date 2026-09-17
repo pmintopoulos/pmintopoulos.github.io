@@ -132,6 +132,138 @@ const posts = [
   renderPost(0);
 })();
 
+// =========================================================
+// Galleries — used by drawings.html and modeling.html.
+// Each page picks its array via the page's data-gallery
+// attribute. Artwork is grouped into ordered "blocks" — each
+// block gets its own heading and grid.
+//
+// To add a piece: copy one of the objects inside "items" and
+// fill in title/description/image. To add a whole new block,
+// copy a whole { name: ..., items: [...] } group and place it
+// wherever you want it to appear (blocks render top to bottom
+// in the order listed here).
+// =========================================================
+const galleries = {
+  drawings: [
+    {
+      name: 'Πρόσφατα',
+      items: [
+        { title: 'Σκίτσο 1', description: 'Σύντομη περιγραφή για αυτό το έργο — τεχνική, έμπνευση, ή ό,τι θέλετε να πείτε γι\' αυτό.', image: 'images/drawings/example-1.jpg' },
+        { title: 'Σκίτσο 2', description: 'Σύντομη περιγραφή για αυτό το έργο.', image: 'images/drawings/example-2.jpg' },
+        { title: 'Σκίτσο 3', description: 'Σύντομη περιγραφή για αυτό το έργο.', image: 'images/drawings/example-3.jpg' },
+      ],
+    },
+  ],
+  modeling: [
+    {
+      name: 'Πρόσφατα',
+      items: [
+        { title: 'Μοντέλο 1', description: 'Σύντομη περιγραφή — υλικό, κλίμακα, χρόνος κατασκευής, ό,τι αξίζει να αναφερθεί.', image: 'images/modeling/example-1.jpg' },
+        { title: 'Μοντέλο 2', description: 'Σύντομη περιγραφή για αυτή την κατασκευή.', image: 'images/modeling/example-2.jpg' },
+        { title: 'Μοντέλο 3', description: 'Σύντομη περιγραφή για αυτή την κατασκευή.', image: 'images/modeling/example-3.jpg' },
+      ],
+    },
+  ],
+};
+
+(function () {
+  const main = document.querySelector('.gallery-main');
+  const blocksEl = document.getElementById('galleryBlocks');
+  const lightbox = document.getElementById('lightbox');
+  if (!main || !blocksEl || !lightbox) return; // not on a gallery page
+
+  const key = main.getAttribute('data-gallery');
+  const groups = galleries[key] || [];
+
+  // Flatten every item across every block into one ordered list,
+  // so the lightbox arrows move through the whole gallery in order.
+  const flat = [];
+  groups.forEach(group => {
+    group.items.forEach(item => flat.push(item));
+  });
+
+  // ---- render the blocks + thumbnail grids ----
+  let flatIndex = 0;
+  groups.forEach(group => {
+    const blockEl = document.createElement('div');
+    blockEl.className = 'gallery-block';
+
+    const heading = document.createElement('h2');
+    heading.textContent = group.name;
+    blockEl.appendChild(heading);
+
+    const grid = document.createElement('div');
+    grid.className = 'gallery-grid';
+
+    group.items.forEach(item => {
+      const thisIndex = flatIndex++;
+      const thumb = document.createElement('button');
+      thumb.type = 'button';
+      thumb.className = 'gallery-thumb';
+      thumb.innerHTML =
+        '<img src="' + item.image + '" alt="' + item.title + '" loading="lazy" ' +
+        'onerror="this.style.display=\'none\'; this.parentElement.classList.add(\'empty\')">' +
+        '<span class="placeholder-label">' + item.title + '</span>' +
+        '<span class="thumb-caption">' + item.title + '</span>';
+      thumb.addEventListener('click', () => openLightbox(thisIndex));
+      grid.appendChild(thumb);
+    });
+
+    blockEl.appendChild(grid);
+    blocksEl.appendChild(blockEl);
+  });
+
+  // ---- lightbox behaviour ----
+  const lbImg = document.getElementById('lightboxImg');
+  const lbTitle = document.getElementById('lightboxTitle');
+  const lbDesc = document.getElementById('lightboxDesc');
+  const lbClose = document.getElementById('lightboxClose');
+  const lbPrev = document.getElementById('lightboxPrev');
+  const lbNext = document.getElementById('lightboxNext');
+
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    currentIndex = index;
+    renderLightbox();
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function renderLightbox() {
+    const item = flat[currentIndex];
+    if (!item) return;
+    lbImg.src = item.image;
+    lbImg.alt = item.title;
+    lbTitle.textContent = item.title;
+    lbDesc.textContent = item.description;
+  }
+  function step(dir) {
+    currentIndex = (currentIndex + dir + flat.length) % flat.length;
+    renderLightbox();
+  }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => step(-1));
+  lbNext.addEventListener('click', () => step(1));
+
+  // click outside the image/caption closes it
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+})();
+
 // Allow tapping a dropdown parent on touch devices to open/close it,
 // since there's no hover on mobile.
 document.querySelectorAll('.has-dropdown > a').forEach(function (link) {
