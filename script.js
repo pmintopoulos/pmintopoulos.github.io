@@ -349,6 +349,117 @@ const workshops = {
   });
 })();
 
+// =========================================================
+// Editions — used by novels.html and stories.html. A flat,
+// ordered list of covers per page. Clicking one opens a
+// detail panel with the cover plus text next to it.
+//
+// "link" is optional — delete the line entirely for a book
+// with no purchase link yet (the button hides itself).
+// =========================================================
+const editions = {
+  novels: [
+    {
+      title: 'Χαλκόφορος',
+      subtitle: 'Μυθιστόρημα — εκδόσεις Μελτέμι',
+      description: [
+        'Σύντομη περιγραφή του βιβλίου — η υπόθεση, το ύφος, ό,τι θέλετε να διαβάσει ο επισκέπτης πριν αποφασίσει να το αγοράσει.',
+      ],
+      cover: 'images/novels/xalkoforos.jpg',
+      link: 'https://meltemibooks.gr/product/xalkoforos/',
+    },
+  ],
+  stories: [
+    {
+      title: 'Τίτλος διηγήματος 1',
+      subtitle: 'Συλλογή διηγημάτων',
+      description: [
+        'Σύντομη περιγραφή για αυτό το διήγημα ή τη συλλογή.',
+      ],
+      cover: 'images/stories/example-1.jpg',
+      // link: 'https://...',
+    },
+  ],
+};
+
+(function () {
+  const main = document.querySelector('[data-editions]');
+  const gridEl = document.getElementById('editionsGrid');
+  const overlay = document.getElementById('bookOverlay');
+  if (!main || !gridEl || !overlay) return; // not on an editions page
+
+  const key = main.getAttribute('data-editions');
+  const items = editions[key] || [];
+
+  const coverEl = document.getElementById('bookCover');
+  const titleEl = document.getElementById('bookTitle');
+  const subtitleEl = document.getElementById('bookSubtitle');
+  const descEl = document.getElementById('bookDesc');
+  const linkEl = document.getElementById('bookLink');
+  const closeBtn = document.getElementById('bookClose');
+  const prevBtn = document.getElementById('bookPrev');
+  const nextBtn = document.getElementById('bookNext');
+
+  let currentIndex = 0;
+
+  function render() {
+    const item = items[currentIndex];
+    if (!item) return;
+    coverEl.src = item.cover;
+    coverEl.alt = item.title;
+    titleEl.textContent = item.title;
+    subtitleEl.textContent = item.subtitle || '';
+    descEl.innerHTML = item.description.map(p => '<p>' + p + '</p>').join('');
+    if (item.link) {
+      linkEl.href = item.link;
+      linkEl.classList.remove('is-hidden');
+    } else {
+      linkEl.classList.add('is-hidden');
+    }
+  }
+
+  function open(index) {
+    currentIndex = index;
+    render();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function step(dir) {
+    currentIndex = (currentIndex + dir + items.length) % items.length;
+    render();
+  }
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', () => step(-1));
+  nextBtn.addEventListener('click', () => step(1));
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+
+  items.forEach((item, index) => {
+    const thumb = document.createElement('button');
+    thumb.type = 'button';
+    thumb.className = 'edition-thumb';
+    thumb.innerHTML =
+      '<img src="' + item.cover + '" alt="' + item.title + '" loading="lazy" ' +
+      'onerror="this.style.display=\'none\'; this.parentElement.classList.add(\'empty\')">' +
+      '<span class="placeholder-label">' + item.title + '</span>' +
+      '<span class="thumb-caption">' + item.title + '</span>';
+    thumb.addEventListener('click', () => open(index));
+    gridEl.appendChild(thumb);
+  });
+})();
+
 // Allow tapping a dropdown parent on touch devices to open/close it,
 // since there's no hover on mobile.
 document.querySelectorAll('.has-dropdown > a').forEach(function (link) {

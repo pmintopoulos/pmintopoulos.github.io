@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Μοντελισμός | Παναγιώτης Μιντόπουλος</title>
-<meta name="description" content="Γκαλερί μοντελισμού του Παναγιώτη Μιντόπουλου.">
+<title>Μυθιστορήματα | Παναγιώτης Μιντόπουλος</title>
+<meta name="description" content="Μυθιστορήματα του συγγραφέα Παναγιώτη Μιντόπουλου.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -86,22 +86,24 @@
   </ul>
 </nav>
 
-<!-- ============ GALLERY ============ -->
-<main class="gallery-main" data-gallery="modeling">
-  <h1 class="gallery-page-title">Μοντελισμός</h1>
-  <div id="galleryBlocks"><!-- filled in by script.js --></div>
+<!-- ============ EDITIONS: cover grid + detail panel ============ -->
+<main class="gallery-main" data-editions="novels">
+  <h1 class="gallery-page-title">Μυθιστορήματα</h1>
+  <div class="editions-grid" id="editionsGrid"><!-- filled in by script.js --></div>
 </main>
 
-<!-- ============ LIGHTBOX (shared markup, driven by script.js) ============ -->
-<div class="lightbox" id="lightbox">
-  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Κλείσιμο">&times;</button>
-  <button type="button" class="lightbox-arrow lightbox-prev" id="lightboxPrev" aria-label="Προηγούμενο">&#8249;</button>
-  <button type="button" class="lightbox-arrow lightbox-next" id="lightboxNext" aria-label="Επόμενο">&#8250;</button>
-  <div class="lightbox-content">
-    <img id="lightboxImg" src="" alt="">
-    <div class="lightbox-caption">
-      <h3 id="lightboxTitle"></h3>
-      <p id="lightboxDesc"></p>
+<!-- ============ BOOK DETAIL PANEL (shared markup, driven by script.js) ============ -->
+<div class="lightbox" id="bookOverlay">
+  <button type="button" class="lightbox-close" id="bookClose" aria-label="Κλείσιμο">&times;</button>
+  <button type="button" class="lightbox-arrow lightbox-prev" id="bookPrev" aria-label="Προηγούμενο">&#8249;</button>
+  <button type="button" class="lightbox-arrow lightbox-next" id="bookNext" aria-label="Επόμενο">&#8250;</button>
+  <div class="book-card">
+    <img id="bookCover" src="" alt="">
+    <div class="book-details">
+      <h3 id="bookTitle"></h3>
+      <p class="book-subtitle" id="bookSubtitle"></p>
+      <div class="book-desc" id="bookDesc"></div>
+      <a id="bookLink" class="book-link" href="#" target="_blank" rel="noopener">Δείτε το βιβλίο &#8594;</a>
     </div>
   </div>
 </div>
