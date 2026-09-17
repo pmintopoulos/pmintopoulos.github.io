@@ -57,13 +57,15 @@ h1, h2, h3 {
   padding: 0 0.5rem;
 }
 [class*="cell-"].empty,
-.photo-box.empty {
+.photo-box.empty,
+.bio-photo.empty {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 [class*="cell-"].empty .placeholder-label,
-.photo-box.empty .placeholder-label {
+.photo-box.empty .placeholder-label,
+.bio-photo.empty .placeholder-label {
   display: block;
 }
 
@@ -762,6 +764,57 @@ h1, h2, h3 {
   .book-card { flex-direction: column; max-height: 88vh; }
   .book-card img { width: 100%; max-width: 100%; height: 260px; }
   .editions-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+
+/* =========================================================
+   BIO — single section, photo on the left, text on the right
+   ========================================================= */
+.bio-main {
+  max-width: var(--max-width);
+  margin: 3px auto 0;
+  padding: 2rem 3px 4rem;
+}
+.bio-page-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  margin-bottom: 1.75rem;
+}
+.bio-layout {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+.bio-photo {
+  flex: 0 0 280px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid #e6e0d4;
+  background: var(--gold);
+}
+.bio-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.bio-photo.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bio-text {
+  flex: 1;
+  min-width: 260px;
+  background: var(--white);
+  border: 1px solid #e6e0d4;
+  padding: 2.25rem;
+  line-height: 1.8;
+}
+.bio-text p { margin: 0 0 1.15rem; }
+.bio-text p:last-child { margin-bottom: 0; }
+
+@media (max-width: 640px) {
+  .bio-layout { flex-direction: column; }
+  .bio-photo { flex-basis: auto; width: 100%; max-width: 280px; }
 }
 
 /* =========================================================

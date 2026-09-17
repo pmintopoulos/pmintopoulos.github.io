@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog | Παναγιώτης Μιντόπουλος</title>
-<meta name="description" content="Άρθρα και σκέψεις από τον συγγραφέα Παναγιώτη Μιντόπουλο.">
+<title>Βιογραφικό | Παναγιώτης Μιντόπουλος</title>
+<meta name="description" content="Βιογραφικό του συγγραφέα Παναγιώτη Μιντόπουλου.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -86,19 +86,18 @@
   </ul>
 </nav>
 
-<!-- ============ BLOG: latest post + history list ============ -->
-<main class="blog-main">
-  <div class="blog-layout">
-    <article class="blog-post" id="blogPost">
-      <!-- filled in by script.js -->
-    </article>
-
-    <aside class="post-history">
-      <h3>Ιστορικό αναρτήσεων</h3>
-      <ul class="post-history-list" id="postHistoryList">
-        <!-- filled in by script.js -->
-      </ul>
-    </aside>
+<!-- ============ BIO: photo + text ============ -->
+<main class="bio-main">
+  <h1 class="bio-page-title">Βιογραφικό</h1>
+  <div class="bio-layout">
+    <div class="bio-photo">
+      <img src="images/author-photo.jpg" alt="Φωτογραφία συγγραφέα" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
+      <span class="placeholder-label">φωτό</span>
+    </div>
+    <div class="bio-text">
+      <p>Εδώ μπαίνει το βιογραφικό σας — πού γεννηθήκατε, πώς ξεκινήσατε να γράφετε, τι σας ενέπνευσε, σπουδές, εκδόσεις, βραβεία, ή ό,τι θέλετε να μοιραστείτε με τους αναγνώστες σας.</p>
+      <p>Μπορείτε να προσθέσετε όσες παραγράφους χρειάζεστε — το κείμενο θα απλωθεί φυσικά δίπλα στη φωτογραφία.</p>
+    </div>
   </div>
 </main>
 
