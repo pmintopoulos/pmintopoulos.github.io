@@ -1,42 +1,46 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // =========================================================
-// Bookstore carousel — rotates through every store that
+// Bookstore link switcher — cycles through every store that
 // carries the book. Meltemi (the publisher) shows first.
 // Edit the "url" for each entry once you have the real link.
+// (Naming here deliberately avoids words like "banner" or
+// "carousel" — ad blockers such as AdGuard/uBlock filter lists
+// hide elements/files with those words in the name, even when
+// the content has nothing to do with ads.)
 // =========================================================
-const bookstores = [
-  { name: 'Μελτέμι',     file: 'banner-meltemi.jpg',    url: 'https://meltemibooks.gr/product/xalkoforos/' },
-  { name: 'Skroutz',     file: 'banner-skroutz.jpg',    url: 'https://www.skroutz.gr/s/68091033/chalkoforos.html' },
-  { name: 'Plus4u',      file: 'banner-plus4u.jpg',     url: 'https://www.plus4u.gr/xalkoforos/108219290-108219290/p' },
-  { name: 'Metabook',    file: 'banner-metabook.jpg',   url: 'https://metabook.gr/books/xalkoforos-panaghiwtis-mintopoylos-1008671' },
-  { name: 'ebooks.gr',   file: 'banner-ebooks.jpg',     url: 'https://www.ebooks.gr/gr/%CF%87%CE%B1%CE%BB%CE%BA%CE%BF%CF%86%CF%8C%CF%81%CE%BF%CF%82-534195.html' },
-  { name: 'Πρωτοπορία',  file: 'banner-protoporia.jpg', url: 'https://www.protoporia.gr/mintopoulos-panagiotis-xalkoforos-9786185931612.html' },
-  { name: 'SelidaBook',  file: 'banner-selidabook.jpg', url: 'https://www.selidabook.gr/product/%CE%A7%CE%91%CE%9B%CE%9A%CE%9F%CE%A6%CE%9F%CE%A1%CE%9F%CE%A3-BKS.1118080' },
-  { name: 'Shopbay',     file: 'banner-shopbay.jpg',    url: 'https://shopbay.gr/en/Chalkoforos-309676.html' },
+const stores = [
+  { name: 'Μελτέμι',     file: 'store-meltemi.jpg',    url: 'https://meltemibooks.gr/product/xalkoforos/' },
+  { name: 'Skroutz',     file: 'store-skroutz.jpg',    url: 'https://www.skroutz.gr/s/68091033/chalkoforos.html' },
+  { name: 'Plus4u',      file: 'store-plus4u.jpg',     url: 'https://www.plus4u.gr/xalkoforos/108219290-108219290/p' },
+  { name: 'Metabook',    file: 'store-metabook.jpg',   url: 'https://metabook.gr/books/xalkoforos-panaghiwtis-mintopoylos-1008671' },
+  { name: 'ebooks.gr',   file: 'store-ebooks.jpg',     url: 'https://www.ebooks.gr/gr/%CF%87%CE%B1%CE%BB%CE%BA%CE%BF%CF%86%CF%8C%CF%81%CE%BF%CF%82-534195.html' },
+  { name: 'Πρωτοπορία',  file: 'store-protoporia.jpg', url: 'https://www.protoporia.gr/mintopoulos-panagiotis-xalkoforos-9786185931612.html' },
+  { name: 'SelidaBook',  file: 'store-selidabook.jpg', url: 'https://www.selidabook.gr/product/%CE%A7%CE%91%CE%9B%CE%9A%CE%9F%CE%A6%CE%9F%CE%A1%CE%9F%CE%A3-BKS.1118080' },
+  { name: 'Shopbay',     file: 'store-shopbay.jpg',    url: 'https://shopbay.gr/en/Chalkoforos-309676.html' },
 ];
 
 (function () {
   const AUTO_ROTATE_MS = 5000;
-  const img = document.getElementById('carouselImg');
-  const link = document.getElementById('carouselLink');
-  const prevBtn = document.getElementById('carouselPrev');
-  const nextBtn = document.getElementById('carouselNext');
-  const wrap = document.getElementById('bookstoreCarousel');
+  const img = document.getElementById('storeImg');
+  const link = document.getElementById('storeLink');
+  const prevBtn = document.getElementById('storePrev');
+  const nextBtn = document.getElementById('storeNext');
+  const wrap = document.getElementById('storeSwitcher');
   if (!img || !link || !prevBtn || !nextBtn || !wrap) return;
 
   let index = 0;
   let timer = null;
 
   function render() {
-    const store = bookstores[index];
-    img.src = 'images/bookstores/' + store.file;
+    const store = stores[index];
+    img.src = 'images/stores/' + store.file;
     img.alt = 'Διαθέσιμο στο ' + store.name;
     link.href = store.url;
   }
 
   function go(step) {
-    index = (index + step + bookstores.length) % bookstores.length;
+    index = (index + step + stores.length) % stores.length;
     render();
   }
 
