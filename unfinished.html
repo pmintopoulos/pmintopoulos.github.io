@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Παναγιώτης Μιντόπουλος | Συγγραφέας</title>
-<meta name="description" content="Επίσημη ιστοσελίδα του συγγραφέα Παναγιώτη Μιντόπουλου.">
+<title>Ημιτελή | Παναγιώτης Μιντόπουλος</title>
+<meta name="description" content="Ημιτελή έργα του συγγραφέα Παναγιώτη Μιντόπουλου.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -86,32 +86,22 @@
   </ul>
 </nav>
 
-<!-- ============ FEATURED BOOK SHOWCASE ============ -->
-<main class="showcase">
-  <h2 class="showcase-title">Τελευταία κυκλοφορία</h2>
-
-  <div class="showcase-grid">
-    <div class="cell cell-cover">
-      <img src="images/latest-book-cover.jpg" alt="Εξώφυλλο τελευταίου βιβλίου" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
-      <span class="placeholder-label">εικόνα τελευταίας κυκλοφορίας</span>
-    </div>
-
-    <div class="cell cell-about">
-      <h3>Λίγα λόγια για το βιβλίο</h3>
-      <p>Εδώ θα μπει το κείμενο σχετικά με την υπόθεση, το είδος και το ύφος του βιβλίου — μια σύντομη, περιεκτική παρουσίαση που θα κάνει τον αναγνώστη να θέλει να μάθει περισσότερα.</p>
-    </div>
-
-    <div class="cell cell-notes">
-      <h3>Σχόλια του συγγραφέα</h3>
-      <p>Εδώ θα μπουν προσωπικά σχόλια του συγγραφέα για το βιβλίο — η αφορμή που το γέννησε, δυσκολίες στη γραφή, ή οτιδήποτε θέλει να μοιραστεί με τους αναγνώστες.</p>
-    </div>
-
-    <div class="cell cell-back">
-      <img src="images/back-cover.jpg" alt="Οπισθόφυλλο" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
-      <span class="placeholder-label">οπισθόφυλλο</span>
-    </div>
-  </div>
+<!-- ============ WORKSHOP: stacked entries + excerpt panel ============ -->
+<main class="workshop-main" data-workshop="unfinished">
+  <h1 class="workshop-page-title">Ημιτελή</h1>
+  <div class="workshop-list" id="workshopList"><!-- filled in by script.js --></div>
 </main>
+
+<!-- ============ EXCERPT PANEL (shared markup, driven by script.js) ============ -->
+<div class="excerpt-overlay" id="excerptOverlay">
+  <div class="excerpt-close-bar">
+    <button type="button" class="excerpt-close" id="excerptClose">&times; Κλείσιμο</button>
+  </div>
+  <div class="excerpt-inner">
+    <h2 class="excerpt-title" id="excerptTitle"></h2>
+    <div class="excerpt-body" id="excerptBody"></div>
+  </div>
+</div>
 
 <footer class="site-footer">
   <p>&copy; <span id="year"></span> Παναγιώτης Μιντόπουλος</p>

@@ -571,6 +571,106 @@ h1, h2, h3 {
 }
 
 /* =========================================================
+   WORKSHOP — stacked entries (Ημιτελή / Αρχειοθετημένα) with
+   a sample-chapter panel that opens below the header, not
+   over it, so the identity strip and nav stay visible.
+   ========================================================= */
+.workshop-main {
+  max-width: var(--max-width);
+  margin: 3px auto 0;
+  padding: 2rem 3px 4rem;
+}
+.workshop-page-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  margin-bottom: 1.5rem;
+}
+
+.workshop-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.workshop-card {
+  background: var(--white);
+  border: 1px solid #e6e0d4;
+  padding: 2rem;
+}
+.workshop-card h2 {
+  font-size: 1.3rem;
+}
+.workshop-card .workshop-subtitle {
+  margin-top: 0.35rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 0.92rem;
+}
+.workshop-card .workshop-text {
+  margin-top: 1rem;
+  line-height: 1.7;
+  max-width: 68ch;
+}
+.workshop-excerpt-btn {
+  margin-top: 1.25rem;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  padding: 0.65rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.workshop-excerpt-btn:hover { background: #2c2822; }
+
+/* Excerpt reading panel — fixed, but its "top" is set by
+   script.js to sit right under the header, so the identity
+   strip + nav above it stay visible and usable. */
+.excerpt-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--paper);
+  z-index: 80;
+  overflow-y: auto;
+  display: none;
+  padding: 0 clamp(1rem, 5vw, 3rem) 3rem;
+}
+.excerpt-overlay.open { display: block; }
+.excerpt-close-bar {
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  padding: 1rem 0;
+  text-align: right;
+  z-index: 2;
+}
+.excerpt-close {
+  background: var(--white);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.excerpt-close:hover { background: var(--paper); }
+.excerpt-inner {
+  max-width: 70ch;
+  margin: 0 auto;
+}
+.excerpt-title {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  margin-bottom: 1.5rem;
+}
+.excerpt-body p {
+  margin: 0 0 1.1rem;
+  line-height: 1.8;
+}
+.excerpt-body p:last-child { margin-bottom: 0; }
+
+/* =========================================================
    FOOTER
    ========================================================= */
 .site-footer {

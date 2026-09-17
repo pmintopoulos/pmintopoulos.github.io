@@ -264,6 +264,91 @@ const galleries = {
   });
 })();
 
+// =========================================================
+// Workshop — used by unfinished.html and archived.html.
+// Each entry is a book/story you've written or left
+// unfinished. To add one, copy an object below and fill in
+// the fields. "excerptBody" is a list of paragraphs — add or
+// remove as many as you need for the sample chapter.
+// =========================================================
+const workshops = {
+  unfinished: [
+    {
+      title: 'Τίτλος έργου 1',
+      subtitle: 'Μια σύντομη υποσημείωση — είδος, κατάσταση, ό,τι θέλετε.',
+      text: 'Λίγα λόγια για αυτό το έργο: η ιδέα πίσω από αυτό, πού έχει φτάσει, και γιατί έμεινε ημιτελές.',
+      excerptTitle: 'Απόσπασμα — Τίτλος έργου 1',
+      excerptBody: [
+        'Εδώ μπαίνει το πραγματικό απόσπασμα του κεφαλαίου. Μπορεί να είναι όσο μεγάλο θέλετε — ο αναγνώστης θα κάνει scroll μέσα στο πάνελ.',
+        'Προσθέστε όσες παραγράφους χρειάζεστε εδώ.',
+      ],
+    },
+  ],
+  archived: [
+    {
+      title: 'Τίτλος έργου 2',
+      subtitle: 'Μια σύντομη υποσημείωση για αυτό το αρχειοθετημένο έργο.',
+      text: 'Λίγα λόγια για το γιατί αυτό το έργο αρχειοθετήθηκε, και τι περιέχει.',
+      excerptTitle: 'Απόσπασμα — Τίτλος έργου 2',
+      excerptBody: [
+        'Εδώ μπαίνει το απόσπασμα για αυτό το έργο.',
+      ],
+    },
+  ],
+};
+
+(function () {
+  const main = document.querySelector('.workshop-main');
+  const listEl = document.getElementById('workshopList');
+  const overlay = document.getElementById('excerptOverlay');
+  if (!main || !listEl || !overlay) return; // not on a workshop page
+
+  const key = main.getAttribute('data-workshop');
+  const entries = workshops[key] || [];
+
+  const excerptTitleEl = document.getElementById('excerptTitle');
+  const excerptBodyEl = document.getElementById('excerptBody');
+  const excerptCloseBtn = document.getElementById('excerptClose');
+
+  function headerBottom() {
+    const nav = document.querySelector('.main-nav');
+    return nav ? Math.max(nav.getBoundingClientRect().bottom, 0) : 0;
+  }
+
+  function openExcerpt(entry) {
+    excerptTitleEl.textContent = entry.excerptTitle || entry.title;
+    excerptBodyEl.innerHTML = entry.excerptBody.map(p => '<p>' + p + '</p>').join('');
+    overlay.style.top = headerBottom() + 'px';
+    overlay.classList.add('open');
+    overlay.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeExcerpt() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  excerptCloseBtn.addEventListener('click', closeExcerpt);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeExcerpt();
+  });
+  window.addEventListener('resize', function () {
+    if (overlay.classList.contains('open')) overlay.style.top = headerBottom() + 'px';
+  });
+
+  entries.forEach(entry => {
+    const card = document.createElement('div');
+    card.className = 'workshop-card';
+    card.innerHTML =
+      '<h2>' + entry.title + '</h2>' +
+      '<p class="workshop-subtitle">' + entry.subtitle + '</p>' +
+      '<p class="workshop-text">' + entry.text + '</p>' +
+      '<button type="button" class="workshop-excerpt-btn">Διαβάστε απόσπασμα &#8594;</button>';
+    card.querySelector('.workshop-excerpt-btn').addEventListener('click', () => openExcerpt(entry));
+    listEl.appendChild(card);
+  });
+})();
+
 // Allow tapping a dropdown parent on touch devices to open/close it,
 // since there's no hover on mobile.
 document.querySelectorAll('.has-dropdown > a').forEach(function (link) {
