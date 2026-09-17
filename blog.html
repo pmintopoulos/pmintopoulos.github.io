@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Παναγιώτης Μιντόπουλος | Συγγραφέας</title>
-<meta name="description" content="Επίσημη ιστοσελίδα του συγγραφέα Παναγιώτη Μιντόπουλου.">
+<title>Blog | Παναγιώτης Μιντόπουλος</title>
+<meta name="description" content="Άρθρα και σκέψεις από τον συγγραφέα Παναγιώτη Μιντόπουλο.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -79,30 +79,19 @@
   </ul>
 </nav>
 
-<!-- ============ FEATURED BOOK SHOWCASE ============ -->
-<main class="showcase">
-  <h2 class="showcase-title">Τελευταία κυκλοφορία</h2>
+<!-- ============ BLOG: latest post + history list ============ -->
+<main class="blog-main">
+  <div class="blog-layout">
+    <article class="blog-post" id="blogPost">
+      <!-- filled in by script.js -->
+    </article>
 
-  <div class="showcase-grid">
-    <div class="cell cell-cover">
-      <img src="images/latest-book-cover.jpg" alt="Εξώφυλλο τελευταίου βιβλίου" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
-      <span class="placeholder-label">εικόνα τελευταίας κυκλοφορίας</span>
-    </div>
-
-    <div class="cell cell-about">
-      <h3>Λίγα λόγια για το βιβλίο</h3>
-      <p>Εδώ θα μπει το κείμενο σχετικά με την υπόθεση, το είδος και το ύφος του βιβλίου — μια σύντομη, περιεκτική παρουσίαση που θα κάνει τον αναγνώστη να θέλει να μάθει περισσότερα.</p>
-    </div>
-
-    <div class="cell cell-notes">
-      <h3>Σχόλια του συγγραφέα</h3>
-      <p>Εδώ θα μπουν προσωπικά σχόλια του συγγραφέα για το βιβλίο — η αφορμή που το γέννησε, δυσκολίες στη γραφή, ή οτιδήποτε θέλει να μοιραστεί με τους αναγνώστες.</p>
-    </div>
-
-    <div class="cell cell-back">
-      <img src="images/back-cover.jpg" alt="Οπισθόφυλλο" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
-      <span class="placeholder-label">οπισθόφυλλο</span>
-    </div>
+    <aside class="post-history">
+      <h3>Ιστορικό αναρτήσεων</h3>
+      <ul class="post-history-list" id="postHistoryList">
+        <!-- filled in by script.js -->
+      </ul>
+    </aside>
   </div>
 </main>
 

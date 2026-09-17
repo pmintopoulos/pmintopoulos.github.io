@@ -70,6 +70,68 @@ const stores = [
   startAuto();
 })();
 
+// =========================================================
+// Blog — posts listed newest first. To add a new post, copy
+// one of the objects below and paste it at the TOP of the
+// array (so it becomes the new "latest" post automatically).
+// "image" is optional — remove the line entirely if a post
+// has no image.
+// =========================================================
+const posts = [
+  {
+    date: '17 Σεπτεμβρίου 2026',
+    title: 'Καλωσήρθατε στο blog μου',
+    subtitle: 'Λίγα λόγια πριν ξεκινήσουμε',
+    body: [
+      'Αυτό είναι ένα πρώτο, δοκιμαστικό κείμενο. Εδώ θα γράφω σκέψεις, νέα για τα βιβλία μου, και ό,τι άλλο αξίζει να μοιραστώ.',
+      'Αντικαταστήστε αυτό το κείμενο με το δικό σας όποτε είστε έτοιμοι να δημοσιεύσετε το πρώτο πραγματικό άρθρο.'
+    ],
+    // image: 'images/blog/example.jpg',
+  },
+];
+
+(function () {
+  const postEl = document.getElementById('blogPost');
+  const listEl = document.getElementById('postHistoryList');
+  if (!postEl || !listEl) return; // not on the blog page
+
+  function renderPost(index) {
+    const post = posts[index];
+    if (!post) return;
+    const imageHtml = post.image
+      ? '<img class="post-image" src="' + post.image + '" alt="">'
+      : '';
+    postEl.innerHTML =
+      '<span class="post-date">' + post.date + '</span>' +
+      '<h2 class="post-title">' + post.title + '</h2>' +
+      '<p class="post-subtitle">' + post.subtitle + '</p>' +
+      '<div class="post-body">' + post.body.map(p => '<p>' + p + '</p>').join('') + '</div>' +
+      imageHtml;
+
+    listEl.querySelectorAll('button').forEach((btn, i) => {
+      btn.classList.toggle('active', i === index);
+    });
+  }
+
+  function renderList() {
+    listEl.innerHTML = '';
+    posts.forEach((post, i) => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.innerHTML =
+        '<span class="item-date">' + post.date + '</span>' +
+        '<span class="item-title">' + post.title + '</span>';
+      btn.addEventListener('click', () => renderPost(i));
+      li.appendChild(btn);
+      listEl.appendChild(li);
+    });
+  }
+
+  renderList();
+  renderPost(0);
+})();
+
 // Allow tapping a dropdown parent on touch devices to open/close it,
 // since there's no hover on mobile.
 document.querySelectorAll('.has-dropdown > a').forEach(function (link) {

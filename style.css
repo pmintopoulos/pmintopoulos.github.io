@@ -318,6 +318,106 @@ h1, h2, h3 {
 }
 
 /* =========================================================
+   BLOG — latest post + clickable history list
+   ========================================================= */
+.blog-main {
+  max-width: var(--max-width);
+  margin: 3px auto 0;
+  padding: 2rem 3px 3px;
+}
+
+.blog-layout {
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.blog-post {
+  position: relative;
+  background: var(--white);
+  border: 1px solid #e6e0d4;
+  padding: 2.5rem;
+  min-height: 320px;
+}
+.blog-post .post-date {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.75rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.blog-post .post-title {
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  padding-right: 7rem;
+}
+.blog-post .post-subtitle {
+  margin-top: 0.5rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+.blog-post .post-body {
+  margin-top: 1.5rem;
+  line-height: 1.75;
+}
+.blog-post .post-body p { margin: 0 0 1rem; }
+.blog-post .post-body p:last-child { margin-bottom: 0; }
+.blog-post .post-image {
+  margin-top: 1.5rem;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.post-history {
+  background: var(--paper);
+  border: 1px solid #e6e0d4;
+  padding: 1.5rem;
+}
+.post-history h3 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+.post-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.post-history-list button {
+  width: 100%;
+  text-align: left;
+  background: var(--grey);
+  color: var(--ink);
+  border: none;
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.post-history-list button:hover { background: var(--grey-dark); color: var(--white); }
+.post-history-list button.active { background: var(--black); color: var(--white); }
+.post-history-list .item-date {
+  display: block;
+  font-size: 0.72rem;
+  opacity: 0.8;
+}
+.post-history-list .item-title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+@media (max-width: 760px) {
+  .blog-layout { grid-template-columns: 1fr; }
+  .blog-post .post-title { padding-right: 0; }
+  .blog-post .post-date { position: static; display: block; margin-bottom: 0.75rem; }
+}
+
+/* =========================================================
    FOOTER
    ========================================================= */
 .site-footer {
