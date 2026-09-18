@@ -947,8 +947,7 @@ h1, h2, h3 {
 
 .ambient-snippet {
   position: absolute;
-  left: 50%;
-  width: 85%;
+  width: 75%;
   transform: translateX(-50%);
   text-align: center;
   font-family: var(--font-display);

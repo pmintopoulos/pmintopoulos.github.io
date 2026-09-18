@@ -594,6 +594,11 @@ const ambientPool = [
     span.style.animationDuration = duration + 's';
     span.style.fontSize = fontSize + 'rem';
     span.style.top = (8 + Math.random() * 74) + '%'; // random vertical point
+    // Random horizontal drift, including bleed past the column's
+    // inner edge (toward the page's center content) — the
+    // container's overflow:hidden clips it there, so it looks
+    // like the text is disappearing behind the content column.
+    span.style.left = (-15 + Math.random() * 130) + '%';
 
     container.appendChild(span);
     span.addEventListener('animationend', () => span.remove());
