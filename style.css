@@ -280,10 +280,10 @@ h1, h2, h3 {
   max-width: var(--max-width);
   margin: 3px auto 0;
   padding: 2.5rem 3px 3px;
-  background: var(--orange);
+  background: var(--white);
 }
 .showcase-title {
-  color: var(--white);
+  color: var(--ink);
   text-align: center;
   font-size: clamp(1.4rem, 3vw, 1.9rem);
   margin-bottom: 1.5rem;
@@ -301,10 +301,14 @@ h1, h2, h3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: var(--white);
+  border: 1px solid var(--white);
+  color: var(--ink);
 }
 
 .cell-cover, .cell-back {
-  background: var(--gold);
+  background: var(--white);
+  border: 1px solid var(--white);
   align-items: center;
   text-align: center;
   min-height: 340px;
@@ -313,9 +317,16 @@ h1, h2, h3 {
 }
 .cell-cover img, .cell-back img { width: 100%; height: 100%; object-fit: cover; }
 
+/* If a cover/back image ever fails to load, fall back to a
+   visible gold tile so the placeholder label (which is white
+   text) stays readable — only the normal, image-loaded state
+   is white-on-white. */
+.cell-cover.empty, .cell-back.empty { background: var(--gold); }
+
 .cell-about, .cell-notes {
-  background: var(--blue);
-  color: var(--white);
+  background: var(--white);
+  border: 1px solid var(--white);
+  color: var(--ink);
 }
 .cell-about h3, .cell-notes h3 {
   font-size: 1.2rem;
