@@ -279,7 +279,7 @@ h1, h2, h3 {
 .showcase {
   max-width: var(--max-width);
   margin: 3px auto 0;
-  padding: 2.5rem 3px 3px;
+  padding: 1rem 3px 3px;
   background: var(--white);
 }
 .showcase-title {
@@ -315,7 +315,7 @@ h1, h2, h3 {
   padding: 0;
   overflow: hidden;
 }
-.cell-cover img, .cell-back img { width: 100%; height: 100%; object-fit: cover; }
+.cell-cover img, .cell-back img { width: 80%; height: 80%; object-fit: cover; }
 
 /* If a cover/back image ever fails to load, fall back to a
    visible gold tile so the placeholder label (which is white
