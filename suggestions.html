@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ημιτελή | Παναγιώτης Μιντόπουλος</title>
-<meta name="description" content="Ημιτελή έργα του συγγραφέα Παναγιώτη Μιντόπουλου.">
+<title>Προτάσεις | Παναγιώτης Μιντόπουλος</title>
+<meta name="description" content="Προτάσεις του Παναγιώτη Μιντόπουλου σε βιβλία, ταινίες, παιχνίδια, επιτραπέζια και μουσική.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -86,20 +86,20 @@
   </ul>
 </nav>
 
-<!-- ============ WORKSHOP: stacked entries + excerpt panel ============ -->
-<main class="workshop-main" data-workshop="unfinished">
-  <h1 class="workshop-page-title">Ημιτελή</h1>
-  <div class="workshop-list" id="workshopList"><!-- filled in by script.js --></div>
+<!-- ============ SUGGESTIONS: 5 category tiles + list panel ============ -->
+<main class="suggestions-main">
+  <h1 class="suggestions-page-title">Προτάσεις</h1>
+  <div class="suggestions-categories" id="suggestionsCategories"><!-- filled in by script.js --></div>
 </main>
 
-<!-- ============ EXCERPT PANEL (shared markup, driven by script.js) ============ -->
-<div class="excerpt-overlay" id="excerptOverlay">
+<!-- ============ SUGGESTIONS PANEL (shared markup, driven by script.js) ============ -->
+<div class="excerpt-overlay" id="suggestionsPanel">
   <div class="excerpt-close-bar">
-    <button type="button" class="excerpt-close" id="excerptClose">&times; Κλείσιμο</button>
+    <button type="button" class="excerpt-close" id="suggestionsClose">&times; Κλείσιμο</button>
   </div>
   <div class="excerpt-inner">
-    <h2 class="excerpt-title" id="excerptTitle"></h2>
-    <div class="excerpt-body" id="excerptBody"></div>
+    <h2 class="excerpt-title" id="suggestionsTitle"></h2>
+    <div class="suggestions-list" id="suggestionsList"></div>
   </div>
 </div>
 

@@ -460,6 +460,106 @@ const editions = {
   });
 })();
 
+// =========================================================
+// Suggestions — used by suggestions.html. Five categories,
+// each a list of items. Image + title always show; the
+// description only appears once the title is clicked.
+// To add an item, copy an object inside the right category's
+// list and fill in title/description/image.
+// =========================================================
+const suggestionCategories = [
+  { key: 'books',      label: 'Βιβλία' },
+  { key: 'movies',     label: 'Ταινίες' },
+  { key: 'games',      label: 'Παιχνίδια' },
+  { key: 'boardgames', label: 'Επιτραπέζια' },
+  { key: 'music',      label: 'Μουσική' },
+];
+
+const suggestions = {
+  books: [
+    { title: 'Τίτλος βιβλίου 1', description: 'Λίγα λόγια για το γιατί το προτείνετε.', image: 'images/suggestions/books/example-1.jpg' },
+  ],
+  movies: [
+    { title: 'Τίτλος ταινίας 1', description: 'Λίγα λόγια για το γιατί την προτείνετε.', image: 'images/suggestions/movies/example-1.jpg' },
+  ],
+  games: [
+    { title: 'Τίτλος παιχνιδιού 1', description: 'Λίγα λόγια για το γιατί το προτείνετε.', image: 'images/suggestions/games/example-1.jpg' },
+  ],
+  boardgames: [
+    { title: 'Τίτλος επιτραπέζιου 1', description: 'Λίγα λόγια για το γιατί το προτείνετε.', image: 'images/suggestions/boardgames/example-1.jpg' },
+  ],
+  music: [
+    { title: 'Τίτλος άλμπουμ/τραγουδιού 1', description: 'Λίγα λόγια για το γιατί το προτείνετε.', image: 'images/suggestions/music/example-1.jpg' },
+  ],
+};
+
+(function () {
+  const main = document.querySelector('.suggestions-main');
+  const catsEl = document.getElementById('suggestionsCategories');
+  const panel = document.getElementById('suggestionsPanel');
+  if (!main || !catsEl || !panel) return; // not on the suggestions page
+
+  const titleEl = document.getElementById('suggestionsTitle');
+  const listEl = document.getElementById('suggestionsList');
+  const closeBtn = document.getElementById('suggestionsClose');
+
+  function headerBottom() {
+    const nav = document.querySelector('.main-nav');
+    return nav ? Math.max(nav.getBoundingClientRect().bottom, 0) : 0;
+  }
+
+  function openPanel(key, label) {
+    const items = suggestions[key] || [];
+    titleEl.textContent = label;
+    listEl.innerHTML = '';
+
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'suggestion-item';
+      row.innerHTML =
+        '<div class="suggestion-item-header">' +
+          '<div class="suggestion-thumb">' +
+            '<img src="' + item.image + '" alt="' + item.title + '" loading="lazy" ' +
+            'onerror="this.style.display=\'none\'; this.parentElement.classList.add(\'empty\')">' +
+            '<span class="placeholder-label">' + item.title + '</span>' +
+          '</div>' +
+          '<button type="button" class="suggestion-title-btn">' + item.title + '</button>' +
+        '</div>' +
+        '<div class="suggestion-desc">' + item.description + '</div>';
+      row.querySelector('.suggestion-title-btn').addEventListener('click', () => {
+        row.classList.toggle('open');
+      });
+      listEl.appendChild(row);
+    });
+
+    panel.style.top = headerBottom() + 'px';
+    panel.classList.add('open');
+    panel.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  }
+  function closePanel() {
+    panel.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+  });
+  window.addEventListener('resize', function () {
+    if (panel.classList.contains('open')) panel.style.top = headerBottom() + 'px';
+  });
+
+  suggestionCategories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'suggestion-category-btn';
+    btn.textContent = cat.label;
+    btn.addEventListener('click', () => openPanel(cat.key, cat.label));
+    catsEl.appendChild(btn);
+  });
+})();
+
 // Allow tapping a dropdown parent on touch devices to open/close it,
 // since there's no hover on mobile.
 document.querySelectorAll('.has-dropdown > a').forEach(function (link) {
