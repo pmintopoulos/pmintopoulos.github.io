@@ -936,7 +936,9 @@ h1, h2, h3 {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: clamp(120px, 12vw, 220px);
+  /* Fills the exact empty margin outside the page's content
+     column, all the way to its edge — not a capped slice. */
+  width: calc((100vw - var(--max-width)) / 2);
   overflow: hidden;
   pointer-events: none;
   z-index: 1;
