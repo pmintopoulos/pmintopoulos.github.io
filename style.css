@@ -916,6 +916,58 @@ h1, h2, h3 {
 }
 
 /* =========================================================
+   AMBIENT SIDE TEXT — decorative fading snippets in the
+   empty margins on wide screens. Non-interactive, hidden
+   whenever there isn't real margin space, and hidden for
+   anyone with reduced-motion preferences.
+   ========================================================= */
+.ambient-text {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: clamp(120px, 12vw, 220px);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  display: none; /* only enabled by the wide-screen rule below */
+}
+.ambient-left { left: 0; }
+.ambient-right { right: 0; }
+
+.ambient-snippet {
+  position: absolute;
+  left: 50%;
+  width: 85%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  opacity: 0;
+  animation-name: ambientFade;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes ambientFade {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  15%  { opacity: var(--peak, 0.35); transform: translateX(-50%) translateY(0); }
+  85%  { opacity: var(--peak, 0.35); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* Only show where the margin is actually wide enough to hold
+   a line or two of text without crowding the page content. */
+@media (min-width: 1400px) {
+  .ambient-text { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-text { display: none !important; }
+}
+
+/* =========================================================
    FOOTER
    ========================================================= */
 .site-footer {

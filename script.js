@@ -560,6 +560,57 @@ const suggestions = {
   });
 })();
 
+// =========================================================
+// Ambient side text — subtle fading snippets in the empty
+// side margins on wide screens (see .ambient-text in CSS).
+// Purely decorative. Replace these placeholder lines with
+// real short quotes/fragments from your own work whenever
+// you like — one string per snippet.
+// =========================================================
+const ambientPool = [
+  'ένας άνεμος λογοτεχνίας',
+  '«...» — απόσπασμα από το έργο σας',
+  'λέξεις που περιμένουν να ειπωθούν',
+  'μια ιστορία ξεκινά',
+  'χαλκός και σκόνη',
+];
+
+(function () {
+  const left = document.getElementById('ambientLeft');
+  const right = document.getElementById('ambientRight');
+  if (!left || !right) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  function spawn(container) {
+    const span = document.createElement('div');
+    span.className = 'ambient-snippet';
+    span.textContent = ambientPool[Math.floor(Math.random() * ambientPool.length)];
+
+    const duration = 7 + Math.random() * 4;   // 7–11s, varies each time
+    const peak = 0.22 + Math.random() * 0.28; // 0.22–0.5 opacity — "different levels"
+    const fontSize = 0.85 + Math.random() * 0.35; // slight size variety
+
+    span.style.setProperty('--peak', peak);
+    span.style.animationDuration = duration + 's';
+    span.style.fontSize = fontSize + 'rem';
+    span.style.top = (8 + Math.random() * 74) + '%'; // random vertical point
+
+    container.appendChild(span);
+    span.addEventListener('animationend', () => span.remove());
+
+    scheduleNext(container);
+  }
+
+  function scheduleNext(container) {
+    const delay = 3000 + Math.random() * 4500; // stagger so columns don't sync
+    setTimeout(() => spawn(container), delay);
+  }
+
+  // stagger the two columns' first appearance too
+  setTimeout(() => spawn(left), 800);
+  setTimeout(() => spawn(right), 2600);
+})();
+
 // Allow tapping a dropdown parent on touch devices to open/close it,
 // since there's no hover on mobile.
 document.querySelectorAll('.has-dropdown > a').forEach(function (link) {
