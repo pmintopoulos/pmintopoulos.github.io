@@ -315,7 +315,7 @@ h1, h2, h3 {
   padding: 0;
   overflow: hidden;
 }
-.cell-cover img, .cell-back img { width: 80%; height: 80%; object-fit: cover; }
+.cell-cover img, .cell-back img { width: 80%; height: 80%; object-fit: contain; }
 
 /* If a cover/back image ever fails to load, fall back to a
    visible gold tile so the placeholder label (which is white
