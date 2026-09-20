@@ -279,7 +279,7 @@ h1, h2, h3 {
 .showcase {
   max-width: var(--max-width);
   margin: 3px auto 0;
-  padding: 0.33rem 3px 3px;
+  padding: 0.17rem 3px 3px;
   background: var(--white);
 }
 .showcase-title {
