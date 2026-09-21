@@ -147,11 +147,12 @@ const posts = [
 const galleries = {
   drawings: [
     {
-      name: 'Πρόσφατα',
+      name: 'Κυνηγοί του Ορίζοντα',
       items: [
-        { title: 'Σκίτσο 1', description: 'Σύντομη περιγραφή για αυτό το έργο — τεχνική, έμπνευση, ή ό,τι θέλετε να πείτε γι\' αυτό.', image: 'images/drawings/example-1.jpg' },
-        { title: 'Σκίτσο 2', description: 'Σύντομη περιγραφή για αυτό το έργο.', image: 'images/drawings/example-2.jpg' },
-        { title: 'Σκίτσο 3', description: 'Σύντομη περιγραφή για αυτό το έργο.', image: 'images/drawings/example-3.jpg' },
+        { title: 'Σαντόζα', description: 'Ο δεύτερος χαρακτήρας από τους Κυνηγούς του Ορίζοντα. Πειρατής, μισθοφόρος, απατεώνας, πιστός φίλος. (ακρυλικά σε χαρτόνι)', image: 'images/drawings/santoza.jpg' },
+        { title: 'Ρέικα', description: 'Η τρίτη χαρακτήρας του βιβλίου Κυνηγοί του Ορίζοντα. Ένα πραγματικό άνθος της ερήμου. (ακρυλικά σε χαρτόνι)', image: 'images/drawings/reika.jpg' },
+        { title: 'Ηχοκράτορας', description: 'Εμφανίζεται στη μέση του βιβλίου Κυνηγοί του Ορίζοντα. Ένας μάγος του ήχου στη μέση της ερήμου, ίσως κάτι περισσότερο. (ακρυλικά σε χαρτόνι)', image: 'images/drawings/ihokratoras.jpg' },
+        { title: 'Χάρτης της Νότιας Αχέλ', description: 'Θα ερχόταν μαζί με το βιβλίο, και περιλαμβάνει τις περισσότερες τοποθεσίες της ιστορίας.', image: 'images/drawings/southern-ahel-map.jpg' },
       ],
     },
   ],
