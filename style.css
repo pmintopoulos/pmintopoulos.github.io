@@ -13,11 +13,37 @@
   --ink: #15120f;
   --ink-soft: #4a453f;
   --white: #ffffff;
+  --card-border: #e6e0d4;
 
   --font-display: "Fraunces", Georgia, serif;
   --font-body: "Work Sans", -apple-system, Segoe UI, sans-serif;
 
   --max-width: 1100px;
+}
+
+/* Night mode — toggled by adding data-theme="dark" to <html> via
+   script.js. Re-theming happens automatically everywhere on the
+   site, since every component below is built from these tokens
+   rather than hardcoded colors. */
+html[data-theme="dark"] {
+  --orange: #e08a3e;
+  --orange-dark: #c76f22;
+  --gold: #e0a63a;
+  --blue: #6c95cc;
+  --grey: #4a463e;
+  --grey-dark: #6f6a5e;
+  --paper: #17150f;
+  --ink: #ece7da;
+  --ink-soft: #b6b0a0;
+  --white: #211e17;
+  --card-border: #343025;
+}
+
+html {
+  transition: background-color 0.2s ease;
+}
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 * { box-sizing: border-box; }
@@ -232,6 +258,22 @@ h1, h2, h3 {
   padding: 0.9rem 0;
 }
 
+.main-nav > ul > li.nav-theme { flex: 0 0 52px; }
+.main-nav > ul > li.nav-theme > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.9rem 0;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.main-nav > ul > li.nav-theme > button:hover { background: #262019; }
+
 .main-nav > ul > li > a {
   display: block;
   padding: 0.9rem 0.75rem;
@@ -358,7 +400,7 @@ h1, h2, h3 {
 .blog-post {
   position: relative;
   background: var(--white);
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   padding: 2.5rem;
   min-height: 320px;
 }
@@ -393,7 +435,7 @@ h1, h2, h3 {
 
 .post-history {
   background: var(--paper);
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   padding: 1.5rem;
 }
 .post-history h3 {
@@ -458,7 +500,7 @@ h1, h2, h3 {
   font-size: 1.3rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e6e0d4;
+  border-bottom: 1px solid var(--card-border);
 }
 
 .gallery-grid {
@@ -471,7 +513,7 @@ h1, h2, h3 {
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   background: var(--white);
   padding: 0;
   cursor: pointer;
@@ -605,7 +647,7 @@ h1, h2, h3 {
 }
 .workshop-card {
   background: var(--white);
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   padding: 2rem;
 }
 .workshop-card h2 {
@@ -697,7 +739,7 @@ h1, h2, h3 {
   position: relative;
   aspect-ratio: 2 / 3;
   overflow: hidden;
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   background: var(--white);
   padding: 0;
   cursor: pointer;
@@ -797,7 +839,7 @@ h1, h2, h3 {
   flex: 0 0 280px;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   background: var(--gold);
 }
 .bio-photo img {
@@ -815,7 +857,7 @@ h1, h2, h3 {
   flex: 1;
   min-width: 260px;
   background: var(--white);
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   padding: 2.25rem;
   line-height: 1.8;
 }
@@ -850,7 +892,7 @@ h1, h2, h3 {
 }
 .suggestion-category-btn {
   background: var(--white);
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   padding: 2rem 1rem;
   text-align: center;
   font-family: var(--font-display);
@@ -866,7 +908,7 @@ h1, h2, h3 {
   gap: 10px;
 }
 .suggestion-item {
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   background: var(--white);
 }
 .suggestion-item-header {
@@ -880,7 +922,7 @@ h1, h2, h3 {
   height: 56px;
   flex-shrink: 0;
   overflow: hidden;
-  border: 1px solid #e6e0d4;
+  border: 1px solid var(--card-border);
   background: var(--gold);
   position: relative;
 }

@@ -1,3 +1,53 @@
+// =========================================================
+// Night mode — toggled via the moon/sun button in the nav.
+// Re-theming itself happens through CSS variables (see the
+// html[data-theme="dark"] block in style.css); this just flips
+// the attribute, remembers the choice, and swaps the icon.
+// =========================================================
+(function () {
+  const btn = document.getElementById('themeToggle');
+  if (!btn) return;
+
+  const MOON =
+    '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">' +
+    '<mask id="themeMoonMask"><rect x="0" y="0" width="24" height="24" fill="#fff"/>' +
+    '<circle cx="15" cy="9" r="7" fill="#000"/></mask>' +
+    '<circle cx="12" cy="12" r="9" fill="currentColor" mask="url(#themeMoonMask)"/></svg>';
+
+  const SUN =
+    '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">' +
+    '<circle cx="12" cy="12" r="4.5" fill="currentColor"/>' +
+    '<g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">' +
+    '<line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/>' +
+    '<line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/>' +
+    '<line x1="4.2" y1="4.2" x2="6" y2="6"/><line x1="18" y1="18" x2="19.8" y2="19.8"/>' +
+    '<line x1="4.2" y1="19.8" x2="6" y2="18"/><line x1="18" y1="6" x2="19.8" y2="4.2"/>' +
+    '</g></svg>';
+
+  function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+  function render() {
+    // Icon shows what you'll switch TO, matching the sun/moon
+    // convention: moon visible in light mode (click for night),
+    // sun visible in dark mode (click for day).
+    btn.innerHTML = isDark() ? SUN : MOON;
+  }
+
+  btn.addEventListener('click', function () {
+    if (isDark()) {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('siteTheme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('siteTheme', 'dark');
+    }
+    render();
+  });
+
+  render();
+})();
+
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // =========================================================
