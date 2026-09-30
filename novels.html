@@ -50,30 +50,26 @@
 <div class="ambient-text ambient-left" id="ambientLeft" aria-hidden="true"></div>
 <div class="ambient-text ambient-right" id="ambientRight" aria-hidden="true"></div>
 
-<!-- ============ TOP STRIP: photo + bookstore banner ============ -->
-<div class="top-strip">
-  <div class="photo-box">
-    <img src="images/author-photo.jpg" alt="Φωτογραφία συγγραφέα" onerror="this.style.display='none'; this.parentElement.classList.add('empty')">
-    <span class="placeholder-label">φωτό</span>
-  </div>
-  <div class="store-switcher" id="storeSwitcher">
-    <a class="store-link" id="storeLink" href="#" target="_blank" rel="noopener" aria-label="Δείτε το βιβλίο στο βιβλιοπωλείο">
-      <img id="storeImg" src="images/stores/store-meltemi.jpg" alt="Διαθέσιμο στο Μελτέμι">
-    </a>
-    <div class="store-arrows">
-      <button type="button" class="store-arrow" id="storePrev" aria-label="Προηγούμενο κατάστημα">&#8249;</button>
-      <button type="button" class="store-arrow" id="storeNext" aria-label="Επόμενο κατάστημα">&#8250;</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ HERO: name/title + contact & social ============ -->
+<!-- ============ HERO: photo + name/title + contact & social ============ -->
 <div class="hero-strip">
   <div class="hero-name">
+    <div class="hero-photo-frame">
+      <img class="hero-photo" src="images/hero-photo.jpg" alt="Φωτογραφία συγγραφέα" onerror="this.style.display='none'">
+      <img class="hero-photo-clip" src="images/hero-clip.png" alt="" onerror="this.style.display='none'">
+    </div>
     <h1>Παναγιώτης Μιντόπουλος</h1>
     <p class="hero-subtitle">Συγγραφέας</p>
   </div>
   <div class="hero-contact">
+    <div class="store-switcher" id="storeSwitcher">
+      <a class="store-link" id="storeLink" href="#" target="_blank" rel="noopener" aria-label="Δείτε το βιβλίο στο βιβλιοπωλείο">
+        <img id="storeImg" src="images/stores/store-meltemi.jpg" alt="Διαθέσιμο στο Μελτέμι">
+      </a>
+      <div class="store-arrows">
+        <button type="button" class="store-arrow" id="storePrev" aria-label="Προηγούμενο κατάστημα">&#8249;</button>
+        <button type="button" class="store-arrow" id="storeNext" aria-label="Επόμενο κατάστημα">&#8250;</button>
+      </div>
+    </div>
     <p class="contact-label">Επικοινωνία</p>
     <a href="mailto:p.mintopoulos@gmail.com">p.mintopoulos@gmail.com</a>
     <div class="social-row">
