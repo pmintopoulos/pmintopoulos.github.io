@@ -116,7 +116,7 @@ h1, h2, h3 {
 }
 .hero-photo-clip {
   position: absolute;
-  top: 2px;
+  top: -4px;
   left: 38px;
   width: 34px;
   transform: rotate(-16deg);
