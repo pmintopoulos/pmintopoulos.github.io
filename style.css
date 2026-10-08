@@ -14,6 +14,7 @@
   --ink-soft: #4a453f;
   --white: #ffffff;
   --on-dark: #ffffff;
+  --on-dark-muted: #a7a29b;
   --card-border: #e6e0d4;
 
   --font-display: "Fraunces", Georgia, serif;
@@ -124,6 +125,100 @@ h1, h2, h3 {
 }
 
 /* =========================================================
+   CANDLES — three small flickering candles in the bottom-right
+   of the name card. Only visible in night mode; pure CSS, no
+   images. Each flame flickers on its own timing so they never
+   move in sync.
+   ========================================================= */
+.candle-cluster {
+  position: absolute;
+  bottom: 12px;
+  right: 22px;
+  display: none;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 1;
+  pointer-events: none;
+}
+html[data-theme="dark"] .candle-cluster {
+  display: flex;
+  animation: candlesFadeIn 1.2s ease both;
+}
+
+.candle {
+  position: relative;
+  width: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.candle-body {
+  width: 10px;
+  border-radius: 2px 2px 1px 1px;
+  background: linear-gradient(90deg, #cdbb8e 0%, #f1e6c9 45%, #d8c79e 100%);
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.12);
+}
+.candle-1 .candle-body { height: 30px; }
+.candle-2 .candle-body { height: 42px; }
+.candle-3 .candle-body { height: 24px; }
+
+.candle-flame {
+  position: relative;
+  z-index: 2;
+  width: 8px;
+  height: 13px;
+  margin-bottom: -1px;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse at 50% 70%, #fff3cf 0%, #ffc15a 45%, #ee7a1f 85%);
+  transform-origin: 50% 100%;
+  animation: flameFlicker 1.6s ease-in-out infinite;
+}
+.candle-glow {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: calc(100% - 30px);
+  width: 46px;
+  height: 46px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(255, 176, 70, 0.5) 0%, rgba(255, 140, 40, 0.14) 50%, transparent 72%);
+  animation: glowPulse 1.6s ease-in-out infinite;
+}
+/* the flame + glow sit above each candle body, which has a
+   different height per candle, so the glow follows each flame */
+.candle-1 .candle-glow { bottom: 36px; }
+.candle-2 .candle-glow { bottom: 48px; }
+.candle-3 .candle-glow { bottom: 30px; }
+
+.candle-2 .candle-flame, .candle-2 .candle-glow { animation-delay: 0.35s; animation-duration: 1.9s; }
+.candle-3 .candle-flame, .candle-3 .candle-glow { animation-delay: 0.7s; animation-duration: 1.4s; }
+
+@keyframes flameFlicker {
+  0%, 100% { transform: rotate(0deg) scale(1, 1); opacity: 1; }
+  20%      { transform: rotate(-3deg) scale(1.06, 0.94); opacity: 0.93; }
+  45%      { transform: rotate(2deg) scale(0.94, 1.08); opacity: 1; }
+  70%      { transform: rotate(-1.5deg) scale(1.03, 0.97); opacity: 0.95; }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.75; }
+  50%      { opacity: 1; }
+}
+@keyframes candlesFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candle-flame, .candle-glow, html[data-theme="dark"] .candle-cluster { animation: none; }
+}
+
+/* On narrow screens the name card is stacked and centered, so
+   tuck the candles into its bottom-right corner but smaller. */
+@media (max-width: 760px) {
+  .candle-cluster { bottom: 8px; right: 14px; gap: 9px; transform: scale(0.8); transform-origin: bottom right; }
+}
+
+/* =========================================================
    STORE SWITCHER — bookstore banner, now living inside the
    hero-contact card, above the "Επικοινωνία" info
    ========================================================= */
@@ -202,7 +297,7 @@ h1, h2, h3 {
   font-family: var(--font-body);
   font-size: 1rem;
   letter-spacing: 0.08em;
-  color: var(--grey);
+  color: var(--on-dark-muted);
 }
 
 .hero-contact {
@@ -220,7 +315,7 @@ h1, h2, h3 {
 .contact-label {
   margin: 0;
   font-size: 0.8rem;
-  color: var(--grey);
+  color: var(--on-dark-muted);
 }
 .hero-contact a { font-size: 0.9rem; }
 .hero-contact a:hover { color: var(--gold); }
