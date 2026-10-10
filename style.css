@@ -125,6 +125,56 @@ h1, h2, h3 {
 }
 
 /* =========================================================
+   TYPEWRITER — "Συγγραφέας" types itself out when a page loads.
+   Each letter is its own <span> with a start time (--t) and the
+   gap until the next letter (--d). A thin cursor follows the
+   typing, then keeps blinking on the last letter for as long as
+   the page is open. Pure CSS: no script needed.
+   ========================================================= */
+.tw-letter {
+  position: relative;
+  animation: twShow 0.01s linear both;
+  animation-delay: var(--t, 0ms);
+}
+.tw-letter::after {
+  content: "";
+  position: absolute;
+  top: 0.12em;
+  bottom: 0.02em;
+  right: -0.12em;
+  width: 0.08em;
+  background: currentColor;
+  opacity: 0;
+  /* visible only during this letter's own window; afterwards it
+     simply falls back to the invisible default above */
+  animation: twCursorStep var(--d, 150ms) linear;
+  animation-delay: var(--t, 0ms);
+}
+/* the final letter's cursor never leaves — it blinks */
+.tw-letter:last-child::after {
+  animation: twCursorBlink 1.1s steps(1) infinite;
+  animation-delay: var(--t, 0ms);
+}
+
+@keyframes twShow {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes twCursorStep {
+  from, to { opacity: 1; }
+}
+@keyframes twCursorBlink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}
+
+/* Visitors who prefer reduced motion just see the word, no typing */
+@media (prefers-reduced-motion: reduce) {
+  .tw-letter { animation: none; }
+  .tw-letter::after { display: none; }
+}
+
+/* =========================================================
    CANDLES — three small flickering candles in the bottom-right
    of the name card. Only visible in night mode; pure CSS, no
    images. Each flame flickers on its own timing so they never
