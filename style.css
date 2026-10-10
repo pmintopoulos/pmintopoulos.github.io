@@ -168,6 +168,16 @@ h1, h2, h3 {
   56%, 100% { opacity: 0; }
 }
 
+/* After the first page of a visit the word has already been typed
+   (the page head adds .intro-done), so it's simply there: no
+   retyping, just the cursor blinking where it left off. */
+html.intro-done .tw-letter { animation: none; }
+html.intro-done .tw-letter::after { animation: none; }
+html.intro-done .tw-letter:last-child::after {
+  animation: twCursorBlink 1.1s steps(1) infinite;
+  animation-delay: 0s;
+}
+
 /* Visitors who prefer reduced motion just see the word, no typing */
 @media (prefers-reduced-motion: reduce) {
   .tw-letter { animation: none; }
