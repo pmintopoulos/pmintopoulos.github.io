@@ -48,6 +48,151 @@
   render();
 })();
 
+// =========================================================
+// Collectible titles — as a visitor explores, new "titles" are
+// typed in after "Συγγραφέας", in the order they're discovered,
+// and stay for the rest of the visit (they reset when the tab
+// closes). Edit the words here; the keys on the left are just
+// internal names. Page keys match the page's file name.
+// =========================================================
+const TITLES = {
+  // earned by visiting a section (first visit only)
+  novels:     'Χρονικογράφος',
+  stories:    'Θριαμβευτής',
+  unfinished: 'Πολυάσχολος',
+  archived:   'Αποθηκάριος Ονείρων',
+  blog:       'Κήρυκας',
+  bio:        'Μελαγχολικός',
+  drawings:   'Ενθουσιώδης Σπηλαιογράφος',
+  // earned by doing something
+  facebook:   'Δημοφιλής',
+  instagram:  'Απεικονιστής',
+  goodreads:  'Βιβλιόφιλος',
+  store:      'Σύντομα Εκατομυριούχος',   // any bookstore link
+  night:      'Εφευρετικός',              // switching to night mode
+  photo:      'Κούκλος',                  // clicking the polaroid
+};
+
+(function () {
+  const p = document.querySelector('.hero-subtitle');
+  if (!p) return;
+
+  const KEY = 'titles';
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const introDone = document.documentElement.classList.contains('intro-done');
+
+  function load() {
+    try { return JSON.parse(sessionStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+  }
+  function save(list) {
+    try { sessionStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  let earned = load();       // titles already collected this visit
+  const queue = [];          // titles waiting to be typed
+  let busy = false;
+  let firstInQueue = true;
+
+  function typeTitle(text, done) {
+    p.classList.add('has-titles');
+    const sep = document.createElement('span');
+    sep.className = 'tw-sep';
+    sep.textContent = '\u00a0\u00b7 ';
+    const t = document.createElement('span');
+    t.className = 'tw-title';
+    p.appendChild(sep);
+    p.appendChild(t);
+
+    if (reduceMotion) { t.textContent = text; done(); return; }
+
+    t.classList.add('typing');
+    let i = 0;
+    (function step() {
+      if (i < text.length) {
+        t.textContent += text.charAt(i++);
+        setTimeout(step, 65 + Math.random() * 60);
+      } else {
+        t.classList.remove('typing');
+        done();
+      }
+    })();
+  }
+
+  function pump() {
+    if (busy || !queue.length) return;
+    busy = true;
+    const text = queue.shift();
+    // the first word waits until the page has settled (and, on the
+    // first page of a visit, until "Συγγραφέας" has finished typing)
+    const startAt = introDone ? 900 : 2700;
+    const wait = firstInQueue ? Math.max(0, startAt - performance.now()) : 350;
+    firstInQueue = false;
+    setTimeout(function () {
+      typeTitle(text, function () { busy = false; pump(); });
+    }, wait);
+  }
+
+  function award(key) {
+    const text = TITLES[key];
+    if (!text || earned.indexOf(text) !== -1) return;
+    earned.push(text);
+    save(earned);          // saved immediately, so leaving mid-typing still counts
+    queue.push(text);
+    pump();
+  }
+
+  // 1) visiting a section
+  const page = (location.pathname.split('/').filter(Boolean).pop() || 'index').replace(/\.html$/, '');
+  award(page);
+
+  // 2) clicking things
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest('a');
+    if (a) {
+      const label = a.getAttribute('aria-label');
+      if (label === 'Facebook') award('facebook');
+      else if (label === 'Instagram') award('instagram');
+      else if (label === 'Goodreads') award('goodreads');
+      else if (a.id === 'storeLink' || a.id === 'bookLink') award('store');
+    }
+  });
+
+  // night mode: listen on the button itself (it redraws its own icon when
+  // clicked, so a page-wide listener would lose track of what was clicked).
+  // This runs after the toggle's own handler, so the theme is already updated.
+  const themeBtn = document.getElementById('themeToggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      if (document.documentElement.getAttribute('data-theme') === 'dark') award('night');
+    });
+  }
+
+  // 3) the polaroid: click to take a closer look (and earn a title)
+  const frame = document.querySelector('.hero-photo-frame');
+  const photo = document.querySelector('.hero-photo');
+  if (frame && photo) {
+    photo.setAttribute('role', 'button');
+    photo.setAttribute('tabindex', '0');
+    photo.setAttribute('aria-label', 'Μεγέθυνση φωτογραφίας');
+
+    frame.addEventListener('click', function () {
+      const zoomIn = !frame.classList.contains('zoomed');
+      frame.classList.toggle('zoomed', zoomIn);
+      if (zoomIn) award('photo');
+    });
+    photo.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); frame.click(); }
+    });
+    // click anywhere else, or press Escape, to put it back
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.hero-photo-frame')) frame.classList.remove('zoomed');
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') frame.classList.remove('zoomed');
+    });
+  }
+})();
+
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // =========================================================

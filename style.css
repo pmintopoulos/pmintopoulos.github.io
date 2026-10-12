@@ -185,6 +185,52 @@ html.intro-done .tw-letter:last-child::after {
 }
 
 /* =========================================================
+   COLLECTED TITLES — words earned while exploring, typed in after
+   "Συγγραφέας". Each title stays in one piece; the line only wraps
+   between titles. The blinking cursor moves to the newest one.
+   ========================================================= */
+.hero-subtitle.has-titles { line-height: 1.55; }
+/* the separator is a no-break space + dot + a normal space, so a line can
+   only break after the dot (never before it); each title stays in one piece */
+.tw-title { white-space: nowrap; }
+
+/* the cursor now lives at the end of the newest title instead */
+.hero-subtitle.has-titles .tw-letter:last-child::after { display: none; }
+.tw-title:last-child::after {
+  content: "";
+  display: inline-block;
+  width: 0.08em;
+  height: 1em;
+  margin-left: 0.1em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: twCursorBlink 1.1s steps(1) infinite;
+}
+.tw-title.typing::after { animation: none; opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tw-title::after { display: none; }
+}
+
+/* =========================================================
+   POLAROID — click to take a closer look. It scales up but keeps
+   its tilt; click elsewhere or press Esc to put it back.
+   ========================================================= */
+.hero-photo-frame {
+  transform-origin: 50% 0;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.hero-photo,
+.hero-photo-clip { pointer-events: auto; }
+.hero-photo { cursor: zoom-in; transition: box-shadow 0.4s ease; }
+.hero-photo:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.hero-photo-frame.zoomed { transform: scale(1.25); z-index: 5; }
+.hero-photo-frame.zoomed .hero-photo {
+  cursor: zoom-out;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.55);
+}
+
+/* =========================================================
    CANDLES — three small flickering candles in the bottom-right
    of the name card. Only visible in night mode; pure CSS, no
    images. Each flame flickers on its own timing so they never
@@ -341,10 +387,11 @@ html[data-theme="dark"] .candle-cluster {
 
 .hero-name {
   position: relative;
+  min-width: 0;
   flex: 2.5;
   background: var(--black);
   color: var(--on-dark);
-  padding: 2.05rem 2.5rem 2.05rem 12.5rem;
+  padding: 2.05rem 5.5rem 2.05rem 12.5rem;
   text-align: left;
   overflow: visible;
 }
@@ -1216,7 +1263,7 @@ html[data-theme="dark"] .candle-cluster {
      of overlapping it from the left, so it doesn't collide with
      the text. */
   .hero-name {
-    padding: 7rem 1.5rem 1.5rem;
+    padding: 7rem 1.5rem 3.5rem;
     text-align: center;
   }
   .hero-photo-frame {
@@ -1225,6 +1272,7 @@ html[data-theme="dark"] .candle-cluster {
     transform: translateX(-50%);
     width: 110px;
   }
+  .hero-photo-frame.zoomed { transform: translateX(-50%) scale(1.25); }
 
   .main-nav > ul { flex-direction: column; }
   .main-nav > ul > li { border-right: none; border-bottom: 1px solid #2c2822; }
