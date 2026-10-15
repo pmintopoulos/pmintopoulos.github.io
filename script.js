@@ -175,8 +175,31 @@ const TITLES = {
     photo.setAttribute('tabindex', '0');
     photo.setAttribute('aria-label', 'Μεγέθυνση φωτογραφίας');
 
+    // The zoom grows from the top-centre of the photo (see .hero-photo-frame in
+    // the CSS). Before zooming in, work out where the photo and clip would land,
+    // and if any part would poke off the page, shift it down/right just enough.
+    const ZOOM = 1.5;   // keep in step with the scale() in the CSS
+    const MARGIN = 10;  // minimum gap kept from the page edge, in px
+    function placeZoom() {
+      frame.style.setProperty('--zx', '0px');
+      frame.style.setProperty('--zy', '0px');
+      const f = frame.getBoundingClientRect();
+      const ox = f.left + f.width / 2;   // transform origin: top-centre
+      const oy = f.top;
+      let minLeft = Infinity, minTop = Infinity;
+      frame.querySelectorAll('img').forEach(function (img) {
+        const r = img.getBoundingClientRect();
+        if (!r.width) return;
+        minLeft = Math.min(minLeft, ox + (r.left - ox) * ZOOM);
+        minTop = Math.min(minTop, oy + (r.top - oy) * ZOOM);
+      });
+      frame.style.setProperty('--zx', Math.max(0, MARGIN - minLeft) + 'px');
+      frame.style.setProperty('--zy', Math.max(0, MARGIN - minTop) + 'px');
+    }
+
     frame.addEventListener('click', function () {
       const zoomIn = !frame.classList.contains('zoomed');
+      if (zoomIn) placeZoom();
       frame.classList.toggle('zoomed', zoomIn);
       if (zoomIn) award('photo');
     });
