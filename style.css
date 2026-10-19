@@ -329,6 +329,40 @@ html[data-theme="dark"] .candle-cluster {
 }
 
 /* =========================================================
+   COBWEB — a web in the top-right corner of the name card, above
+   the candles. Night mode only. The drawing and its shimmer live in
+   images/cobweb.svg (it fades in and out on its own timing, as if
+   it only shows when the candlelight finds it).
+   ========================================================= */
+.hero-name::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 104px;
+  height: 104px;
+  background: url("images/cobweb.svg") no-repeat top right / contain;
+  filter: drop-shadow(0 0 2px rgba(255, 205, 140, 0.35));
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+}
+html[data-theme="dark"] .hero-name::after {
+  display: block;
+  animation: candlesFadeIn 1.6s ease both;
+}
+/* keep the name and titles above the web, never under it */
+.hero-name h1,
+.hero-subtitle { position: relative; z-index: 1; }
+
+@media (max-width: 760px) {
+  .hero-name::after { width: 84px; height: 84px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="dark"] .hero-name::after { animation: none; }
+}
+
+/* =========================================================
    STORE SWITCHER — bookstore banner, now living inside the
    hero-contact card, above the "Επικοινωνία" info
    ========================================================= */
