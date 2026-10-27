@@ -216,6 +216,338 @@ const TITLES = {
   }
 })();
 
+// =========================================================
+// Typewriter — a classic typewriter at the bottom of every page.
+// It types out the chapter in typewriter.txt one keystroke at a
+// time: the right key sinks, its typebar swings up and strikes
+// the paper, the carriage steps left, a bell rings near the end
+// of each line, and the carriage returns for the next one. It
+// remembers its place for the rest of the visit, and only types
+// while it is on screen. Drawn entirely in code (no images).
+//
+// To change the text: replace typewriter.txt (one paragraph per
+// line). To change the pace: KEY_DELAY below.
+// =========================================================
+(function () {
+  const footer = document.querySelector('.site-footer');
+  if (!footer) return;
+
+  // ----- things you may want to tweak -----
+  const TEXT_URL = 'typewriter.txt';
+  const COLS = 30;                 // characters per line on the paper
+  const KEY_DELAY = [85, 150];     // ms between keystrokes: [fastest, slowest]
+  const FALLBACK_TEXT =
+    'Εδώ θα πληκτρολογείται το κείμενό σας.\n' +
+    'Αντικαταστήστε το αρχείο typewriter.txt με το κεφάλαιο της επιλογής σας.';
+  // ----------------------------------------
+
+  const NS = 'http://www.w3.org/2000/svg';
+  const STORE = 'twPos';
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // geometry (SVG units)
+  const W = 720, H = 372;
+  const SX = 360, SY = 152;        // the strike point, where the bars hit the paper
+  const BAR_L = 84;                // length of a typebar
+  const LINE_H = 17, CHAR_W = 7.2, FONT = 12;
+  const BASE_Y = 156;              // baseline of the line being typed
+
+  function S(tag, attrs, parent, text) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  // ---------- the scene ----------
+  const section = document.createElement('section');
+  section.className = 'typewriter';
+  section.setAttribute('aria-hidden', 'true');
+  const svg = S('svg', { viewBox: '0 0 ' + W + ' ' + H, focusable: 'false' }, section);
+  footer.parentNode.insertBefore(section, footer);
+
+  const defs = S('defs', {}, svg);
+  defs.innerHTML =
+    '<linearGradient id="twBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4a44"/><stop offset="1" stop-color="#18211e"/></linearGradient>' +
+    '<linearGradient id="twChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f7"/><stop offset=".45" stop-color="#aab1b6"/><stop offset=".55" stop-color="#7b838a"/><stop offset="1" stop-color="#d6dadd"/></linearGradient>' +
+    '<linearGradient id="twPlaten" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#555b61"/><stop offset=".2" stop-color="#22262a"/><stop offset=".62" stop-color="#0c0e10"/><stop offset="1" stop-color="#2c3136"/></linearGradient>' +
+    '<linearGradient id="twPaper" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#efe8d6"/><stop offset=".08" stop-color="#fbf7ea"/><stop offset=".92" stop-color="#fbf7ea"/><stop offset="1" stop-color="#ece4d0"/></linearGradient>' +
+    '<radialGradient id="twKey" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#fffdf5"/><stop offset="1" stop-color="#d9d1ba"/></radialGradient>' +
+    '<linearGradient id="twGold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8923f"/><stop offset=".5" stop-color="#f0d58a"/><stop offset="1" stop-color="#b8923f"/></linearGradient>' +
+    '<linearGradient id="twFade" gradientUnits="userSpaceOnUse" x1="0" y1="-6" x2="0" y2="64"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>' +
+    '<mask id="twPaperMask" maskUnits="userSpaceOnUse" x="-600" y="-90" width="2000" height="270"><rect x="-600" y="-90" width="2000" height="270" fill="url(#twFade)"/></mask>' +
+    '<filter id="twBlur" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="7"/></filter>';
+
+  // floor shadow
+  S('ellipse', { cx: W / 2, cy: 366, rx: 300, ry: 9, fill: '#000', opacity: '.35', filter: 'url(#twBlur)' }, svg);
+
+  // body
+  S('path', { d: 'M70 232 Q70 206 96 206 L624 206 Q650 206 650 232 L650 340 Q650 366 624 366 L96 366 Q70 366 70 340 Z', fill: 'url(#twBody)', stroke: '#0c1210', 'stroke-width': 2 }, svg);
+  S('rect', { x: 84, y: 220, width: 552, height: 132, rx: 14, fill: 'none', stroke: 'url(#twGold)', 'stroke-width': 1.2, opacity: '.6' }, svg);
+  S('text', { x: 96, y: 244, fill: 'url(#twGold)', 'font-family': 'Georgia, serif', 'font-size': 11, 'letter-spacing': 2.2 }, svg, 'ΜΙΝΤΟΠΟΥΛΟΣ');
+  S('text', { x: 624, y: 244, fill: 'url(#twGold)', 'font-family': 'Georgia, serif', 'font-size': 11, 'letter-spacing': 2.2, 'text-anchor': 'end' }, svg, 'ΓΡΑΦΟΜΗΧΑΝΗ');
+
+  // carriage rail
+  S('rect', { x: 78, y: 199, width: 564, height: 8, rx: 3, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, svg);
+
+  // basket opening in the deck (dark cavity where the bars live)
+  (function () {
+    const R = 100, a1 = Math.asin((206 - SY) / R);
+    const xr = SX + R * Math.cos(a1), xl = SX - R * Math.cos(a1);
+    S('path', { d: 'M' + xr + ' 206 A' + R + ' ' + R + ' 0 0 1 ' + xl + ' 206 Z', fill: '#0b0f10' }, svg);
+  })();
+
+  // ---------- the carriage (platen + paper), slides left as you type ----------
+  const carriage = S('g', { class: 'tw-carriage' }, svg);
+  const px0 = SX - 24, pw = COLS * CHAR_W + 48;
+  const paperG = S('g', { mask: 'url(#twPaperMask)' }, carriage);
+  S('rect', { x: px0, y: -90, width: pw, height: 262, fill: 'url(#twPaper)' }, paperG);
+  S('rect', { x: px0, y: -90, width: 1.2, height: 262, fill: '#000', opacity: '.10' }, paperG);
+  S('rect', { x: px0 + pw - 1.2, y: -90, width: 1.2, height: 262, fill: '#000', opacity: '.10' }, paperG);
+  const linesG = S('g', { class: 'tw-lines', style: 'transition:transform 170ms ease-out' }, paperG);
+
+  const plL = px0 - 26, plR = px0 + pw + 26;
+  S('rect', { x: plL, y: 164, width: plR - plL, height: 34, rx: 17, fill: 'url(#twPlaten)' }, carriage);
+  S('rect', { x: plL + 16, y: 169, width: plR - plL - 32, height: 3, rx: 1.5, fill: '#fff', opacity: '.16' }, carriage);
+  [plL, plR].forEach(function (x, i) {
+    S('ellipse', { cx: x, cy: 181, rx: 9, ry: 19, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, carriage);
+    const kx = i === 0 ? x - 30 : x + 10;
+    S('rect', { x: kx, y: 170, width: 20, height: 22, rx: 6, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, carriage);
+    for (let g = 0; g < 4; g++) S('line', { x1: kx + 4 + g * 4, y1: 173, x2: kx + 4 + g * 4, y2: 189, stroke: '#5d656b', 'stroke-width': 1 }, carriage);
+  });
+
+  // ---------- the keys ----------
+  const ROWS = [
+    { y: 278, x: 241, labels: 'ςερτυθιοπ' },
+    { y: 302, x: 248, labels: 'ασδφγηξκλ' },
+    { y: 326, x: 255, labels: 'ζχψωβνμ,.' }
+  ];
+  S('rect', { x: 214, y: 262, width: 292, height: 98, rx: 12, fill: '#101713', stroke: '#566560', 'stroke-width': 1.4 }, svg);
+  const keys = [];
+  ROWS.forEach(function (row) {
+    row.labels.split('').forEach(function (ch, i) {
+      const cx = row.x + i * 28, cy = row.y;
+      const g = S('g', { class: 'tw-key' }, svg);
+      S('circle', { cx: cx, cy: cy + 2, r: 11, fill: '#000', opacity: '.45' }, g);
+      S('circle', { cx: cx, cy: cy, r: 11, fill: 'url(#twChrome)', stroke: '#3f474c', 'stroke-width': .8 }, g);
+      S('circle', { cx: cx, cy: cy, r: 8.6, fill: 'url(#twKey)' }, g);
+      S('text', { x: cx, y: cy + 3.4, 'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-size': 9.5, 'font-weight': 'bold', fill: '#2a2620' }, g, ch.toUpperCase());
+      keys.push({ ch: ch, g: g, x: cx });
+    });
+  });
+  // space bar
+  const spaceG = S('g', { class: 'tw-key' }, svg);
+  S('rect', { x: 298, y: 343, width: 124, height: 16, rx: 8, fill: '#000', opacity: '.45' }, spaceG);
+  S('rect', { x: 298, y: 341, width: 124, height: 16, rx: 8, fill: 'url(#twChrome)', stroke: '#3f474c', 'stroke-width': .8 }, spaceG);
+  S('rect', { x: 304, y: 344, width: 112, height: 10, rx: 5, fill: 'url(#twKey)' }, spaceG);
+
+  // ---------- the typebars ----------
+  // pivots sit on an arc around the strike point, so each bar points straight at it
+  const bandR = 88;
+  (function () {
+    const a0 = 8 * Math.PI / 180, a1 = 172 * Math.PI / 180;
+    const p = function (a, r) { return (SX + r * Math.cos(a)).toFixed(1) + ' ' + (SY + r * Math.sin(a)).toFixed(1); };
+    S('path', { d: 'M' + p(a0, bandR) + ' A' + bandR + ' ' + bandR + ' 0 0 1 ' + p(a1, bandR), fill: 'none', stroke: '#2b3237', 'stroke-width': 9, 'stroke-linecap': 'round' }, svg);
+    S('path', { d: 'M' + p(a0, bandR + 4.5) + ' A' + (bandR + 4.5) + ' ' + (bandR + 4.5) + ' 0 0 1 ' + p(a1, bandR + 4.5), fill: 'none', stroke: '#8a939a', 'stroke-width': 1 }, svg);
+    // little supports from the band down to the deck
+    [a0, a1].forEach(function (a) {
+      const x = SX + bandR * Math.cos(a), y = SY + bandR * Math.sin(a);
+      S('line', { x1: x, y1: y, x2: x, y2: 207, stroke: '#2b3237', 'stroke-width': 9 }, svg);
+    });
+  })();
+
+  const order = keys.map(function (k, i) { return i; }).sort(function (a, b) { return keys[a].x - keys[b].x; });
+  const bars = [];
+  const nBars = keys.length;
+  order.forEach(function (keyIndex, rank) {
+    const phi = 12 + rank * (156 / (nBars - 1));
+    const rad = phi * Math.PI / 180;
+    const px = SX + BAR_L * Math.cos(rad), py = SY + BAR_L * Math.sin(rad);
+    const g = S('g', { transform: 'translate(' + px.toFixed(2) + ' ' + py.toFixed(2) + ') rotate(' + (phi + 180).toFixed(2) + ')' }, svg);
+    const inner = S('g', { class: 'tw-bar', style: 'transform-origin:0 0;transform-box:view-box;transform:scaleX(.62)' }, g);
+    S('rect', { x: 0, y: -.9, width: BAR_L, height: 1.8, fill: '#b9bfc4' }, inner);
+    S('rect', { x: BAR_L - 8, y: -3.4, width: 8, height: 6.8, rx: 1.2, fill: '#2a2f33', stroke: '#9aa1a6', 'stroke-width': .6 }, inner);
+    bars[keyIndex] = inner;
+  });
+
+  // ---------- carriage-return lever and bell ----------
+  const lever = S('g', { style: 'transform-origin:98px 200px;transform-box:view-box' }, svg);
+  S('line', { x1: 98, y1: 200, x2: 56, y2: 170, stroke: 'url(#twChrome)', 'stroke-width': 4, 'stroke-linecap': 'round' }, lever);
+  S('circle', { cx: 54, cy: 168, r: 6, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, lever);
+  S('circle', { cx: 98, cy: 200, r: 5, fill: '#2b3237', stroke: '#8a939a', 'stroke-width': .8 }, svg);
+
+  const bell = S('g', { style: 'transform-origin:612px 200px;transform-box:view-box' }, svg);
+  S('path', { d: 'M594 200 A18 15 0 0 1 630 200 Z', fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, bell);
+  S('rect', { x: 590, y: 199, width: 44, height: 3, rx: 1.5, fill: '#4b5257' }, bell);
+  const ding = S('g', { opacity: '0', stroke: '#e8dcc0', 'stroke-width': 1.4, fill: 'none', 'stroke-linecap': 'round' }, svg);
+  S('path', { d: 'M640 176 q8 6 8 16' }, ding);
+  S('path', { d: 'M646 168 q13 10 13 26' }, ding);
+  S('path', { d: 'M584 176 q-8 6 -8 16' }, ding);
+  S('path', { d: 'M578 168 q-13 10 -13 26' }, ding);
+
+  // ---------- typing state ----------
+  let lines = [], li = 0, ci = 0, baseIdx = 0;
+  const lineEls = {};
+  let ready = false, visible = false, running = false;
+
+  function layout(text) {
+    const out = [];
+    const paras = text.replace(/\r/g, '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+    paras.forEach(function (para, pi) {
+      let line = '';
+      para.split(/\s+/).forEach(function (word) {
+        while (word.length > COLS) {
+          if (line) { out.push(line); line = ''; }
+          out.push(word.slice(0, COLS)); word = word.slice(COLS);
+        }
+        if (!line) line = word;
+        else if ((line + ' ' + word).length <= COLS) line += ' ' + word;
+        else { out.push(line); line = word; }
+      });
+      if (line) out.push(line);
+      if (pi < paras.length - 1) out.push('');
+    });
+    return out;
+  }
+
+  function lineY(i) { return BASE_Y + (i - baseIdx) * LINE_H; }
+  function ensureLine(i) {
+    if (!lineEls[i]) {
+      lineEls[i] = S('text', { y: lineY(i), 'font-family': '"Courier New", Courier, monospace', 'font-size': FONT, fill: '#2a251f' }, linesG);
+    }
+    return lineEls[i];
+  }
+  function addGlyph(i, col, ch) {
+    if (ch === ' ') return;
+    S('tspan', {
+      x: (SX + col * CHAR_W + rand(-.25, .25)).toFixed(2),
+      y: (lineY(i) + rand(-.35, .35)).toFixed(2),
+      opacity: rand(.82, 1).toFixed(2)
+    }, ensureLine(i), ch);
+  }
+  function setScroll(animated) {
+    linesG.style.transition = animated ? 'transform 170ms ease-out' : 'none';
+    linesG.style.transform = 'translateY(' + (-(li - baseIdx) * LINE_H) + 'px)';
+  }
+  function setCarriage(col, mode) {
+    carriage.style.transition = mode === 'return' ? 'transform 430ms cubic-bezier(.45,0,.25,1)'
+                              : mode === 'step' ? 'transform 70ms ease-out' : 'none';
+    carriage.style.transform = 'translateX(' + (-col * CHAR_W) + 'px)';
+  }
+  function save() { try { sessionStorage.setItem(STORE, JSON.stringify({ l: li, c: ci })); } catch (e) {} }
+
+  function keyFor(ch) {
+    if (ch === ' ') return -1;
+    let n = ch.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const i = keys.findIndex(function (k) { return k.ch === n; });
+    return i >= 0 ? i : Math.floor(Math.random() * keys.length);
+  }
+  function pressKey(i) {
+    const g = i < 0 ? spaceG : keys[i].g;
+    g.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(3px)' }, { transform: 'translateY(0)' }], { duration: 130, easing: 'ease-out' });
+  }
+  function thrust(i) {
+    if (i < 0) return;
+    bars[i].animate([{ transform: 'scaleX(.62)' }, { transform: 'scaleX(1)', offset: .42 }, { transform: 'scaleX(.62)' }], { duration: 120, easing: 'ease-out' });
+  }
+  function ringBell() {
+    bell.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-7deg)' }, { transform: 'rotate(6deg)' }, { transform: 'rotate(-4deg)' }, { transform: 'rotate(0)' }], { duration: 420 });
+    ding.animate([{ opacity: 0 }, { opacity: 1, offset: .15 }, { opacity: 0 }], { duration: 520 });
+  }
+
+  async function typeChar(ch) {
+    const k = keyFor(ch);
+    pressKey(k); thrust(k);
+    await sleep(52);                       // the bar reaches the paper
+    addGlyph(li, ci, ch);
+    ci++; save(); setCarriage(ci, 'step');
+    paperG.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-.8px)' }, { transform: 'translateY(0)' }], { duration: 70 });
+    if (ci === COLS - 5 && lines[li].length > COLS - 5) ringBell();
+    let d = rand(KEY_DELAY[0], KEY_DELAY[1]);
+    if (ch === ' ') d += 25;
+    if (ch === ',') d += 140;
+    if ('.!?;·'.indexOf(ch) >= 0) d += 280;
+    if (Math.random() < .03) d += 350;     // a typist's little hesitation
+    await sleep(d);
+  }
+  async function carriageReturn() {
+    await sleep(160);
+    lever.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-22deg)', offset: .35 }, { transform: 'rotate(0)' }], { duration: 520, easing: 'ease-in-out' });
+    await sleep(80);
+    li++; ci = 0; save();
+    ensureLine(li);
+    setScroll(true);
+    setCarriage(0, 'return');
+    await sleep(470);
+    // forget lines that have scrolled far out of sight
+    Object.keys(lineEls).forEach(function (k) { if (+k < li - 11) { lineEls[k].remove(); delete lineEls[k]; } });
+    await sleep(120);
+  }
+
+  async function run() {
+    if (running || !ready || reduceMotion) return;
+    running = true;
+    while (visible && ready) {
+      if (li >= lines.length) break;                  // the chapter is finished
+      if (ci < lines[li].length) await typeChar(lines[li][ci]);
+      else if (li < lines.length - 1) await carriageReturn();
+      else { li = lines.length; break; }
+      save();
+    }
+    running = false;
+  }
+
+  function restore(startLine, startCol) {
+    li = Math.min(startLine, Math.max(0, lines.length - 1));
+    ci = Math.min(startCol, lines[li] ? lines[li].length : 0);
+    baseIdx = li;
+    for (let i = Math.max(0, li - 10); i <= li; i++) {
+      ensureLine(i);
+      const upto = i < li ? lines[i].length : ci;
+      for (let c = 0; c < upto; c++) addGlyph(i, c, lines[i][c]);
+    }
+    setScroll(false);
+    setCarriage(ci, 'none');
+  }
+
+  // ---------- go ----------
+  fetch(TEXT_URL).then(function (r) { if (!r.ok) throw 0; return r.text(); })
+    .catch(function () { return FALLBACK_TEXT; })
+    .then(function (text) {
+      lines = layout(text);
+      if (!lines.length) lines = layout(FALLBACK_TEXT);
+      let pos = { l: 0, c: 0 };
+      try { pos = JSON.parse(sessionStorage.getItem(STORE)) || pos; } catch (e) {}
+      if (reduceMotion) {
+        // a still sheet with the opening lines already typed
+        li = 0; ci = 0; baseIdx = 0;
+        const n = Math.min(7, lines.length);
+        for (let i = 0; i < n; i++) { ensureLine(i); for (let c = 0; c < lines[i].length; c++) addGlyph(i, c, lines[i][c]); }
+        linesG.style.transform = 'translateY(' + (-(Math.max(0, n - 5)) * LINE_H) + 'px)';
+        return;
+      }
+      restore(pos.l, pos.c);
+      ready = true;
+      update();
+    });
+
+  let onScreen = !('IntersectionObserver' in window);
+  function update() { visible = onScreen && !document.hidden; if (visible) run(); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      onScreen = entries[0].isIntersecting;
+      update();
+    }, { threshold: .3 }).observe(svg);
+  }
+  document.addEventListener('visibilitychange', update);
+
+  // exposed only for testing/tweaking in the console
+  window.__typewriter = { get state() { return { li: li, ci: ci, lines: lines.length }; } };
+})();
+
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // =========================================================

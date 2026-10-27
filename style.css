@@ -1279,6 +1279,25 @@ html[data-theme="dark"] .hero-name::after {
 }
 
 /* =========================================================
+   TYPEWRITER — drawn and driven by script.js, inserted just above
+   the footer on every page.
+   ========================================================= */
+.typewriter {
+  max-width: var(--max-width);
+  margin: 4rem auto 0;
+  padding: 0 3px;
+}
+.typewriter svg {
+  display: block;
+  width: min(100%, 720px);
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+html[data-theme="dark"] .typewriter svg { filter: brightness(0.9); }
+@media print { .typewriter { display: none; } }
+
+/* =========================================================
    FOOTER
    ========================================================= */
 .site-footer {
