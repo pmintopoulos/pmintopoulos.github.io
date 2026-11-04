@@ -226,7 +226,8 @@ const TITLES = {
 // while it is on screen. Drawn entirely in code (no images).
 //
 // To change the text: replace typewriter.txt (one paragraph per
-// line). To change the pace: KEY_DELAY below.
+// line). To change the pace: KEY_DELAY below. To change the size
+// on the page: the width in .typewriter svg (style.css).
 // =========================================================
 (function () {
   const footer = document.querySelector('.site-footer');
@@ -234,7 +235,7 @@ const TITLES = {
 
   // ----- things you may want to tweak -----
   const TEXT_URL = 'typewriter.txt';
-  const COLS = 30;                 // characters per line on the paper
+  const COLS = 40;                 // characters per line on the paper
   const KEY_DELAY = [85, 150];     // ms between keystrokes: [fastest, slowest]
   const FALLBACK_TEXT =
     'Εδώ θα πληκτρολογείται το κείμενό σας.\n' +
@@ -245,12 +246,13 @@ const TITLES = {
   const STORE = 'twPos';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // geometry (SVG units)
-  const W = 720, H = 372;
-  const SX = 360, SY = 152;        // the strike point, where the bars hit the paper
+  // geometry (SVG units) — everything is worked out from these
+  const W = 1040, H = 396;
+  const SX = W / 2, SY = 152;      // the strike point, where the bars hit the paper
   const BAR_L = 84;                // length of a typebar
-  const LINE_H = 17, CHAR_W = 7.2, FONT = 12;
-  const BASE_Y = 156;              // baseline of the line being typed
+  const FONT = 14, CHAR_W = FONT * 0.6, LINE_H = 19;
+  const BASE_Y = 157;              // baseline of the line being typed
+  const BODY_L = 60, BODY_R = W - 60, BODY_T = 206, BODY_B = 380;
 
   function S(tag, attrs, parent, text) {
     const e = document.createElementNS(NS, tag);
@@ -274,39 +276,60 @@ const TITLES = {
     '<linearGradient id="twBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4a44"/><stop offset="1" stop-color="#18211e"/></linearGradient>' +
     '<linearGradient id="twChrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f7"/><stop offset=".45" stop-color="#aab1b6"/><stop offset=".55" stop-color="#7b838a"/><stop offset="1" stop-color="#d6dadd"/></linearGradient>' +
     '<linearGradient id="twPlaten" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#555b61"/><stop offset=".2" stop-color="#22262a"/><stop offset=".62" stop-color="#0c0e10"/><stop offset="1" stop-color="#2c3136"/></linearGradient>' +
-    '<linearGradient id="twPaper" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#efe8d6"/><stop offset=".08" stop-color="#fbf7ea"/><stop offset=".92" stop-color="#fbf7ea"/><stop offset="1" stop-color="#ece4d0"/></linearGradient>' +
+    '<linearGradient id="twPaper" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#efe8d6"/><stop offset=".06" stop-color="#fbf7ea"/><stop offset=".94" stop-color="#fbf7ea"/><stop offset="1" stop-color="#ece4d0"/></linearGradient>' +
     '<radialGradient id="twKey" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#fffdf5"/><stop offset="1" stop-color="#d9d1ba"/></radialGradient>' +
     '<linearGradient id="twGold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8923f"/><stop offset=".5" stop-color="#f0d58a"/><stop offset="1" stop-color="#b8923f"/></linearGradient>' +
-    '<linearGradient id="twFade" gradientUnits="userSpaceOnUse" x1="0" y1="-6" x2="0" y2="64"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>' +
-    '<mask id="twPaperMask" maskUnits="userSpaceOnUse" x="-600" y="-90" width="2000" height="270"><rect x="-600" y="-90" width="2000" height="270" fill="url(#twFade)"/></mask>' +
-    '<filter id="twBlur" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="7"/></filter>';
+    '<linearGradient id="twFade" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="50"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#fff"/></linearGradient>' +
+    '<mask id="twPaperMask" maskUnits="userSpaceOnUse" x="-800" y="-120" width="2800" height="300"><rect x="-800" y="-120" width="2800" height="300" fill="url(#twFade)"/></mask>' +
+    '<filter id="twBlur" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="8"/></filter>';
 
   // floor shadow
-  S('ellipse', { cx: W / 2, cy: 366, rx: 300, ry: 9, fill: '#000', opacity: '.35', filter: 'url(#twBlur)' }, svg);
+  S('ellipse', { cx: W / 2, cy: H - 8, rx: (BODY_R - BODY_L) / 2 + 20, ry: 9, fill: '#000', opacity: '.35', filter: 'url(#twBlur)' }, svg);
 
   // body
-  S('path', { d: 'M70 232 Q70 206 96 206 L624 206 Q650 206 650 232 L650 340 Q650 366 624 366 L96 366 Q70 366 70 340 Z', fill: 'url(#twBody)', stroke: '#0c1210', 'stroke-width': 2 }, svg);
-  S('rect', { x: 84, y: 220, width: 552, height: 132, rx: 14, fill: 'none', stroke: 'url(#twGold)', 'stroke-width': 1.2, opacity: '.6' }, svg);
-  S('text', { x: 96, y: 244, fill: 'url(#twGold)', 'font-family': 'Georgia, serif', 'font-size': 11, 'letter-spacing': 2.2 }, svg, 'ΜΙΝΤΟΠΟΥΛΟΣ');
-  S('text', { x: 624, y: 244, fill: 'url(#twGold)', 'font-family': 'Georgia, serif', 'font-size': 11, 'letter-spacing': 2.2, 'text-anchor': 'end' }, svg, 'ΓΡΑΦΟΜΗΧΑΝΗ');
+  S('path', { d: 'M' + BODY_L + ' ' + (BODY_T + 26) + ' Q' + BODY_L + ' ' + BODY_T + ' ' + (BODY_L + 26) + ' ' + BODY_T +
+                 ' L' + (BODY_R - 26) + ' ' + BODY_T + ' Q' + BODY_R + ' ' + BODY_T + ' ' + BODY_R + ' ' + (BODY_T + 26) +
+                 ' L' + BODY_R + ' ' + (BODY_B - 26) + ' Q' + BODY_R + ' ' + BODY_B + ' ' + (BODY_R - 26) + ' ' + BODY_B +
+                 ' L' + (BODY_L + 26) + ' ' + BODY_B + ' Q' + BODY_L + ' ' + BODY_B + ' ' + BODY_L + ' ' + (BODY_B - 26) + ' Z',
+         fill: 'url(#twBody)', stroke: '#0c1210', 'stroke-width': 2 }, svg);
+  S('rect', { x: BODY_L + 14, y: BODY_T + 14, width: BODY_R - BODY_L - 28, height: BODY_B - BODY_T - 28, rx: 16, fill: 'none', stroke: 'url(#twGold)', 'stroke-width': 1.2, opacity: '.6' }, svg);
+
+  // the two engraved side plates, with the name and a few little details
+  function plate(x, y, w, h, title, sub) {
+    S('rect', { x: x, y: y, width: w, height: h, rx: 10, fill: '#0f1613', stroke: 'url(#twGold)', 'stroke-width': 1.2, opacity: '.95' }, svg);
+    [[x + 10, y + 10], [x + w - 10, y + 10], [x + 10, y + h - 10], [x + w - 10, y + h - 10]].forEach(function (p) {
+      S('circle', { cx: p[0], cy: p[1], r: 2.4, fill: 'url(#twChrome)', stroke: '#3f474c', 'stroke-width': .5 }, svg);
+    });
+    const cx = x + w / 2;
+    S('text', { x: cx, y: y + 36, 'text-anchor': 'middle', fill: 'url(#twGold)', 'font-family': 'Georgia, serif', 'font-size': 17, 'letter-spacing': 3.2 }, svg, title);
+    S('path', { d: 'M' + (cx - 78) + ' ' + (y + 50) + ' H' + (cx - 9) + ' M' + (cx + 9) + ' ' + (y + 50) + ' H' + (cx + 78) +
+                   ' M' + cx + ' ' + (y + 45) + ' l5 5 l-5 5 l-5 -5 Z', stroke: 'url(#twGold)', 'stroke-width': 1, fill: 'url(#twGold)', opacity: '.85' }, svg);
+    S('text', { x: cx, y: y + 70, 'text-anchor': 'middle', fill: 'url(#twGold)', 'font-family': 'Georgia, serif', 'font-size': 10, 'letter-spacing': 3, opacity: '.85' }, svg, sub);
+    // ventilation slits underneath, like a real machine's side louvres
+    for (let i = 0; i < 4; i++) {
+      S('rect', { x: x + 14, y: y + h + 18 + i * 12, width: w - 28, height: 3.4, rx: 1.7, fill: '#080c0b', stroke: '#2e3b36', 'stroke-width': .6 }, svg);
+    }
+  }
+  plate(BODY_L + 40, BODY_T + 26, 250, 82, 'ΜΙΝΤΟΠΟΥΛΟΣ', 'ΣΥΓΓΡΑΦΕΑΣ');
+  plate(BODY_R - 40 - 250, BODY_T + 26, 250, 82, 'ΓΡΑΦΟΜΗΧΑΝΗ', 'Νο 1');
 
   // carriage rail
-  S('rect', { x: 78, y: 199, width: 564, height: 8, rx: 3, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, svg);
+  S('rect', { x: BODY_L + 8, y: 199, width: BODY_R - BODY_L - 16, height: 8, rx: 3, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, svg);
 
   // basket opening in the deck (dark cavity where the bars live)
   (function () {
-    const R = 100, a1 = Math.asin((206 - SY) / R);
+    const R = 100, a1 = Math.asin((BODY_T - SY) / R);
     const xr = SX + R * Math.cos(a1), xl = SX - R * Math.cos(a1);
-    S('path', { d: 'M' + xr + ' 206 A' + R + ' ' + R + ' 0 0 1 ' + xl + ' 206 Z', fill: '#0b0f10' }, svg);
+    S('path', { d: 'M' + xr + ' ' + BODY_T + ' A' + R + ' ' + R + ' 0 0 1 ' + xl + ' ' + BODY_T + ' Z', fill: '#0b0f10' }, svg);
   })();
 
   // ---------- the carriage (platen + paper), slides left as you type ----------
   const carriage = S('g', { class: 'tw-carriage' }, svg);
-  const px0 = SX - 24, pw = COLS * CHAR_W + 48;
+  const px0 = SX - 26, pw = COLS * CHAR_W + 52;
   const paperG = S('g', { mask: 'url(#twPaperMask)' }, carriage);
-  S('rect', { x: px0, y: -90, width: pw, height: 262, fill: 'url(#twPaper)' }, paperG);
-  S('rect', { x: px0, y: -90, width: 1.2, height: 262, fill: '#000', opacity: '.10' }, paperG);
-  S('rect', { x: px0 + pw - 1.2, y: -90, width: 1.2, height: 262, fill: '#000', opacity: '.10' }, paperG);
+  S('rect', { x: px0, y: -120, width: pw, height: 292, fill: 'url(#twPaper)' }, paperG);
+  S('rect', { x: px0, y: -120, width: 1.2, height: 292, fill: '#000', opacity: '.10' }, paperG);
+  S('rect', { x: px0 + pw - 1.2, y: -120, width: 1.2, height: 292, fill: '#000', opacity: '.10' }, paperG);
   const linesG = S('g', { class: 'tw-lines', style: 'transition:transform 170ms ease-out' }, paperG);
 
   const plL = px0 - 26, plR = px0 + pw + 26;
@@ -319,30 +342,34 @@ const TITLES = {
     for (let g = 0; g < 4; g++) S('line', { x1: kx + 4 + g * 4, y1: 173, x2: kx + 4 + g * 4, y2: 189, stroke: '#5d656b', 'stroke-width': 1 }, carriage);
   });
 
-  // ---------- the keys ----------
+  // ---------- the keys: four rows, like a real machine ----------
+  const PITCH = 29, KR = 10.5;
   const ROWS = [
-    { y: 278, x: 241, labels: 'ςερτυθιοπ' },
-    { y: 302, x: 248, labels: 'ασδφγηξκλ' },
-    { y: 326, x: 255, labels: 'ζχψωβνμ,.' }
+    { y: 276, labels: '1234567890-' },
+    { y: 299, labels: ';ςερτυθιοπ' },
+    { y: 322, labels: 'ασδφγηξκλ' },
+    { y: 345, labels: 'ζχψωβνμ,.' }
   ];
-  S('rect', { x: 214, y: 262, width: 292, height: 98, rx: 12, fill: '#101713', stroke: '#566560', 'stroke-width': 1.4 }, svg);
+  S('rect', { x: SX - 192, y: 260, width: 384, height: 114, rx: 12, fill: '#101713', stroke: '#566560', 'stroke-width': 1.4 }, svg);
   const keys = [];
-  ROWS.forEach(function (row) {
+  ROWS.forEach(function (row, r) {
+    const n = row.labels.length;
+    const x0 = SX - (n - 1) * PITCH / 2 + (r - 1.5) * 7;     // each row sits a little to the right of the one above
     row.labels.split('').forEach(function (ch, i) {
-      const cx = row.x + i * 28, cy = row.y;
+      const cx = x0 + i * PITCH, cy = row.y;
       const g = S('g', { class: 'tw-key' }, svg);
-      S('circle', { cx: cx, cy: cy + 2, r: 11, fill: '#000', opacity: '.45' }, g);
-      S('circle', { cx: cx, cy: cy, r: 11, fill: 'url(#twChrome)', stroke: '#3f474c', 'stroke-width': .8 }, g);
-      S('circle', { cx: cx, cy: cy, r: 8.6, fill: 'url(#twKey)' }, g);
-      S('text', { x: cx, y: cy + 3.4, 'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-size': 9.5, 'font-weight': 'bold', fill: '#2a2620' }, g, ch.toUpperCase());
+      S('circle', { cx: cx, cy: cy + 2, r: KR, fill: '#000', opacity: '.45' }, g);
+      S('circle', { cx: cx, cy: cy, r: KR, fill: 'url(#twChrome)', stroke: '#3f474c', 'stroke-width': .8 }, g);
+      S('circle', { cx: cx, cy: cy, r: KR - 2.4, fill: 'url(#twKey)' }, g);
+      S('text', { x: cx, y: cy + 3.2, 'text-anchor': 'middle', 'font-family': 'Georgia, serif', 'font-size': 9, 'font-weight': 'bold', fill: '#2a2620' }, g, ch.toUpperCase());
       keys.push({ ch: ch, g: g, x: cx });
     });
   });
   // space bar
   const spaceG = S('g', { class: 'tw-key' }, svg);
-  S('rect', { x: 298, y: 343, width: 124, height: 16, rx: 8, fill: '#000', opacity: '.45' }, spaceG);
-  S('rect', { x: 298, y: 341, width: 124, height: 16, rx: 8, fill: 'url(#twChrome)', stroke: '#3f474c', 'stroke-width': .8 }, spaceG);
-  S('rect', { x: 304, y: 344, width: 112, height: 10, rx: 5, fill: 'url(#twKey)' }, spaceG);
+  S('rect', { x: SX - 64, y: 362, width: 128, height: 14, rx: 7, fill: '#000', opacity: '.45' }, spaceG);
+  S('rect', { x: SX - 64, y: 360, width: 128, height: 14, rx: 7, fill: 'url(#twChrome)', stroke: '#3f474c', 'stroke-width': .8 }, spaceG);
+  S('rect', { x: SX - 58, y: 363, width: 116, height: 8, rx: 4, fill: 'url(#twKey)' }, spaceG);
 
   // ---------- the typebars ----------
   // pivots sit on an arc around the strike point, so each bar points straight at it
@@ -352,41 +379,47 @@ const TITLES = {
     const p = function (a, r) { return (SX + r * Math.cos(a)).toFixed(1) + ' ' + (SY + r * Math.sin(a)).toFixed(1); };
     S('path', { d: 'M' + p(a0, bandR) + ' A' + bandR + ' ' + bandR + ' 0 0 1 ' + p(a1, bandR), fill: 'none', stroke: '#2b3237', 'stroke-width': 9, 'stroke-linecap': 'round' }, svg);
     S('path', { d: 'M' + p(a0, bandR + 4.5) + ' A' + (bandR + 4.5) + ' ' + (bandR + 4.5) + ' 0 0 1 ' + p(a1, bandR + 4.5), fill: 'none', stroke: '#8a939a', 'stroke-width': 1 }, svg);
-    // little supports from the band down to the deck
     [a0, a1].forEach(function (a) {
       const x = SX + bandR * Math.cos(a), y = SY + bandR * Math.sin(a);
-      S('line', { x1: x, y1: y, x2: x, y2: 207, stroke: '#2b3237', 'stroke-width': 9 }, svg);
+      S('line', { x1: x, y1: y, x2: x, y2: BODY_T + 1, stroke: '#2b3237', 'stroke-width': 9 }, svg);
     });
   })();
 
-  const order = keys.map(function (k, i) { return i; }).sort(function (a, b) { return keys[a].x - keys[b].x; });
-  const bars = [];
-  const nBars = keys.length;
-  order.forEach(function (keyIndex, rank) {
-    const phi = 12 + rank * (156 / (nBars - 1));
+  const nBars = 30, barEls = [];
+  for (let i = 0; i < nBars; i++) {
+    const phi = 12 + i * (156 / (nBars - 1));
     const rad = phi * Math.PI / 180;
     const px = SX + BAR_L * Math.cos(rad), py = SY + BAR_L * Math.sin(rad);
     const g = S('g', { transform: 'translate(' + px.toFixed(2) + ' ' + py.toFixed(2) + ') rotate(' + (phi + 180).toFixed(2) + ')' }, svg);
     const inner = S('g', { class: 'tw-bar', style: 'transform-origin:0 0;transform-box:view-box;transform:scaleX(.62)' }, g);
     S('rect', { x: 0, y: -.9, width: BAR_L, height: 1.8, fill: '#b9bfc4' }, inner);
     S('rect', { x: BAR_L - 8, y: -3.4, width: 8, height: 6.8, rx: 1.2, fill: '#2a2f33', stroke: '#9aa1a6', 'stroke-width': .6 }, inner);
-    bars[keyIndex] = inner;
-  });
+    barEls.push(inner);
+  }
+  // each key works the bar that sits at the same place across the basket
+  const bars = [];
+  keys.map(function (k, i) { return i; })
+      .sort(function (a, b) { return keys[a].x - keys[b].x; })
+      .forEach(function (keyIndex, rank) {
+        bars[keyIndex] = barEls[Math.min(nBars - 1, Math.floor(rank * nBars / keys.length))];
+      });
 
   // ---------- carriage-return lever and bell ----------
-  const lever = S('g', { style: 'transform-origin:98px 200px;transform-box:view-box' }, svg);
-  S('line', { x1: 98, y1: 200, x2: 56, y2: 170, stroke: 'url(#twChrome)', 'stroke-width': 4, 'stroke-linecap': 'round' }, lever);
-  S('circle', { cx: 54, cy: 168, r: 6, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, lever);
-  S('circle', { cx: 98, cy: 200, r: 5, fill: '#2b3237', stroke: '#8a939a', 'stroke-width': .8 }, svg);
+  const LV = BODY_L + 34;
+  const lever = S('g', { style: 'transform-origin:' + LV + 'px 200px;transform-box:view-box' }, svg);
+  S('line', { x1: LV, y1: 200, x2: LV - 44, y2: 168, stroke: 'url(#twChrome)', 'stroke-width': 4, 'stroke-linecap': 'round' }, lever);
+  S('circle', { cx: LV - 46, cy: 166, r: 6, fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, lever);
+  S('circle', { cx: LV, cy: 200, r: 5, fill: '#2b3237', stroke: '#8a939a', 'stroke-width': .8 }, svg);
 
-  const bell = S('g', { style: 'transform-origin:612px 200px;transform-box:view-box' }, svg);
-  S('path', { d: 'M594 200 A18 15 0 0 1 630 200 Z', fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, bell);
-  S('rect', { x: 590, y: 199, width: 44, height: 3, rx: 1.5, fill: '#4b5257' }, bell);
+  const BX = BODY_R - 40;
+  const bell = S('g', { style: 'transform-origin:' + BX + 'px 200px;transform-box:view-box' }, svg);
+  S('path', { d: 'M' + (BX - 18) + ' 200 A18 15 0 0 1 ' + (BX + 18) + ' 200 Z', fill: 'url(#twChrome)', stroke: '#4b5257', 'stroke-width': .8 }, bell);
+  S('rect', { x: BX - 22, y: 199, width: 44, height: 3, rx: 1.5, fill: '#4b5257' }, bell);
   const ding = S('g', { opacity: '0', stroke: '#e8dcc0', 'stroke-width': 1.4, fill: 'none', 'stroke-linecap': 'round' }, svg);
-  S('path', { d: 'M640 176 q8 6 8 16' }, ding);
-  S('path', { d: 'M646 168 q13 10 13 26' }, ding);
-  S('path', { d: 'M584 176 q-8 6 -8 16' }, ding);
-  S('path', { d: 'M578 168 q-13 10 -13 26' }, ding);
+  S('path', { d: 'M' + (BX + 28) + ' 176 q8 6 8 16' }, ding);
+  S('path', { d: 'M' + (BX + 34) + ' 168 q13 10 13 26' }, ding);
+  S('path', { d: 'M' + (BX - 28) + ' 176 q-8 6 -8 16' }, ding);
+  S('path', { d: 'M' + (BX - 34) + ' 168 q-13 10 -13 26' }, ding);
 
   // ---------- typing state ----------
   let lines = [], li = 0, ci = 0, baseIdx = 0;
@@ -433,7 +466,7 @@ const TITLES = {
     linesG.style.transform = 'translateY(' + (-(li - baseIdx) * LINE_H) + 'px)';
   }
   function setCarriage(col, mode) {
-    carriage.style.transition = mode === 'return' ? 'transform 430ms cubic-bezier(.45,0,.25,1)'
+    carriage.style.transition = mode === 'return' ? 'transform 470ms cubic-bezier(.45,0,.25,1)'
                               : mode === 'step' ? 'transform 70ms ease-out' : 'none';
     carriage.style.transform = 'translateX(' + (-col * CHAR_W) + 'px)';
   }
@@ -475,15 +508,15 @@ const TITLES = {
   }
   async function carriageReturn() {
     await sleep(160);
-    lever.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-22deg)', offset: .35 }, { transform: 'rotate(0)' }], { duration: 520, easing: 'ease-in-out' });
+    lever.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-22deg)', offset: .35 }, { transform: 'rotate(0)' }], { duration: 560, easing: 'ease-in-out' });
     await sleep(80);
     li++; ci = 0; save();
     ensureLine(li);
     setScroll(true);
     setCarriage(0, 'return');
-    await sleep(470);
+    await sleep(510);
     // forget lines that have scrolled far out of sight
-    Object.keys(lineEls).forEach(function (k) { if (+k < li - 11) { lineEls[k].remove(); delete lineEls[k]; } });
+    Object.keys(lineEls).forEach(function (k) { if (+k < li - 10) { lineEls[k].remove(); delete lineEls[k]; } });
     await sleep(120);
   }
 
@@ -504,7 +537,7 @@ const TITLES = {
     li = Math.min(startLine, Math.max(0, lines.length - 1));
     ci = Math.min(startCol, lines[li] ? lines[li].length : 0);
     baseIdx = li;
-    for (let i = Math.max(0, li - 10); i <= li; i++) {
+    for (let i = Math.max(0, li - 9); i <= li; i++) {
       ensureLine(i);
       const upto = i < li ? lines[i].length : ci;
       for (let c = 0; c < upto; c++) addGlyph(i, c, lines[i][c]);
@@ -524,9 +557,9 @@ const TITLES = {
       if (reduceMotion) {
         // a still sheet with the opening lines already typed
         li = 0; ci = 0; baseIdx = 0;
-        const n = Math.min(7, lines.length);
+        const n = Math.min(6, lines.length);
         for (let i = 0; i < n; i++) { ensureLine(i); for (let c = 0; c < lines[i].length; c++) addGlyph(i, c, lines[i][c]); }
-        linesG.style.transform = 'translateY(' + (-(Math.max(0, n - 5)) * LINE_H) + 'px)';
+        linesG.style.transform = 'translateY(' + (-(Math.max(0, n - 4)) * LINE_H) + 'px)';
         return;
       }
       restore(pos.l, pos.c);

@@ -746,7 +746,7 @@ html[data-theme="dark"] .hero-name::after {
 .gallery-main {
   max-width: var(--max-width);
   margin: 3px auto 0;
-  padding: 2rem 3px 4rem;
+  padding: 2rem 3px 1.2rem;   /* short bottom: the typewriter follows directly */
 }
 .gallery-page-title {
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
@@ -891,7 +891,7 @@ html[data-theme="dark"] .hero-name::after {
 .workshop-main {
   max-width: var(--max-width);
   margin: 3px auto 0;
-  padding: 2rem 3px 4rem;
+  padding: 2rem 3px 1.2rem;   /* short bottom: the typewriter follows directly */
 }
 .workshop-page-title {
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
@@ -1082,7 +1082,7 @@ html[data-theme="dark"] .hero-name::after {
 .bio-main {
   max-width: var(--max-width);
   margin: 3px auto 0;
-  padding: 2rem 3px 4rem;
+  padding: 2rem 3px 1.2rem;   /* short bottom: the typewriter follows directly */
 }
 .bio-page-title {
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
@@ -1137,7 +1137,7 @@ html[data-theme="dark"] .hero-name::after {
 .suggestions-main {
   max-width: var(--max-width);
   margin: 3px auto 0;
-  padding: 2rem 3px 4rem;
+  padding: 2rem 3px 1.2rem;   /* short bottom: the typewriter follows directly */
 }
 .suggestions-page-title {
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
@@ -1284,12 +1284,16 @@ html[data-theme="dark"] .hero-name::after {
    ========================================================= */
 .typewriter {
   max-width: var(--max-width);
-  margin: 4rem auto 0;
+  /* small gap under the page content; the paper itself fades in from the
+     top of the drawing, so there is no big empty band above it */
+  margin: 0.6rem auto 2.5rem;
   padding: 0 3px;
 }
 .typewriter svg {
   display: block;
-  width: min(100%, 720px);
+  /* the size on the page: as wide as the content column, never wider.
+     Change 1100px to make it smaller or larger. */
+  width: min(100%, 1100px);
   height: auto;
   margin: 0 auto;
   overflow: visible;
@@ -1307,6 +1311,18 @@ html[data-theme="dark"] .typewriter svg { filter: brightness(0.9); }
   text-align: center;
   font-size: 0.8rem;
   color: var(--ink-soft);
+
+  /* The typewriter now closes the page, so the copyright line is hidden
+     visually. It stays in the page for screen readers. To bring it back,
+     delete the lines from here down to the closing brace. */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* =========================================================
